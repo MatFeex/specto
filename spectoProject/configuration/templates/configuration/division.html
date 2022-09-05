@@ -1,0 +1,23 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div>
+    <h5>{{division_count}} divisions registered</h5>
+    <a href="{% url 'create-division' %}">Create A Division</a>
+    <a href="">Restore A Division</a>
+
+    {% for division in divisions %}
+        <div>
+            <a href="{% url 'update-division' division.id %}">Edit</a>
+            <a href="{% url 'delete-division' division.id %}">Delete</a>
+
+            <h5> - <a href="">{{division.name}}</a> -- Location : {{division.location}}</h5>
+            <h5>Description : {{division.description}}</h5>
+            <hr>
+        </div>
+    {% endfor %}
+</div>
+
+
+{% endblock content%}
