@@ -1,0 +1,23 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div>
+    <h5>{{product_count}} products registered for this program</h5>
+    <a href="{% url 'create-product' division_id program_id %}">Create A Product</a>
+    <a href="{% url 'deleted-product' division_id program_id %}">Restore A Product</a>
+
+    {% for product in products %}
+        <div>
+            <a href="{% url 'update-product' division_id program_id product.id %}">Edit</a>
+            <a href="{% url 'delete-product' division_id program_id product.id %}">Delete</a>
+
+            <h5> - <a href="{% url 'workshop' division_id program_id product.id %}">{{product.name}}</a> -- Program : {{product.program}}</h5>
+            <h5>Description : {{product.description}}</h5>
+            <hr>
+        </div>
+    {% endfor %}
+</div>
+
+
+{% endblock content%}

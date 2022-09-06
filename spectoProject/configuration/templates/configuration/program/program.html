@@ -12,7 +12,7 @@
             <a href="{% url 'update-program' division_id program.id %}">Edit</a>
             <a href="{% url 'delete-program' division_id program.id %}">Delete</a>
 
-            <h5> - <a href="">{{program.name}}</a> -- Division : {{program.division}}</h5>
+            <h5> - <a href="{% url 'product' division_id program.id %}">{{program.name}}</a> -- Division : {{program.division}}</h5>
             <h5>Description : {{program.description}}</h5>
             <hr>
         </div>

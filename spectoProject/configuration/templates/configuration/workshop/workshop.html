@@ -1,0 +1,23 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div>
+    <h5>{{workshop_count}} workshops registered for this product</h5>
+    <a href="{% url 'create-workshop' division_id program_id product_id %}">Create A Workshop</a>
+    <a href="{% url 'deleted-workshop' division_id program_id product_id %}">Restore A Workshop</a>
+
+    {% for workshop in workshops %}
+        <div>
+            <a href="{% url 'update-workshop' division_id program_id product_id workshop.id %}">Edit</a>
+            <a href="{% url 'delete-workshop' division_id program_id product_id workshop.id %}">Delete</a>
+
+            <h5> - <a href="">{{workshop.name}}</a> -- Product : {{workshop.product}}</h5>
+            <h5>Description : {{workshop.description}}</h5>
+            <hr>
+        </div>
+    {% endfor %}
+</div>
+
+
+{% endblock content%}

@@ -1,17 +1,14 @@
 from django.utils import timezone
 from msilib.schema import Error
-from multiprocessing.util import abstract_sockets_supported
-from turtle import update
 from django.db import models
-from django.contrib.auth.models import User
 
 
 # Create your models here.
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    created_by = models.CharField(max_length=50, default="Unknown User")
-    updated_by = models.CharField(max_length=50, default="Unknown User")
+    created_by = models.CharField(max_length=50, default="Default User")
+    updated_by = models.CharField(max_length=50, default="Default User")
 
     class Meta :
         abstract = True
@@ -78,7 +75,7 @@ class Program(BaseModel,SoftDeleteModel):
 class Product(BaseModel,SoftDeleteModel):
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
     name = models.CharField(max_length=30, default="Product name")
-    description = models.CharField(max_length=200,default="Workshop description")
+    description = models.CharField(max_length=200,default="Product description")
 
     def __str__(self):
         return self.name
