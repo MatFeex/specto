@@ -6,22 +6,22 @@ from .models import Division, Program, Product, Workshop
 class DivisionForm(ModelForm):
     class Meta:
         model = Division
-        fields = '__all__'
+        fields = ['name','location','description']
 
 
 class ProgramForm(ModelForm):
     class Meta:
         model = Program
-        fields = '__all__'
+        fields = ['division','name','description']
 
 
 class ProductForm(ModelForm):
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ['program','name','description']
 
 
 class WorkshopForm(ModelForm):
     class Meta:
         model = Workshop
-        fields = '__all__'
+        fields = ['product','name','description']

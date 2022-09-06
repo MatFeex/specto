@@ -1,3 +1,4 @@
+from django.utils import timezone
 from msilib.schema import Error
 from multiprocessing.util import abstract_sockets_supported
 from turtle import update
@@ -41,14 +42,14 @@ class SoftDeleteModel(models.Model):
 
     def soft_deleted(self):
         self.is_deleted = True
-        # self.deleted_at = models.DateTimeField(auto_now=True)
-        self.deleted_by = models.ForeignKey(User,default=User,on_delete=models.CASCADE)
+        self.deleted_at = timezone.now()
+        self.deleted_by = "Default User"
         self.save()
 
     def restore(self):
         self.is_deleted = False
-        # self.restored_at = models.DateTimeField(auto_now=True)
-        self.restored_by = models.ForeignKey(User,default=User,on_delete=models.CASCADE)
+        self.restored_at = timezone.now()
+        self.restored_by = "Default User"
         self.save()
 
     class Meta : 
