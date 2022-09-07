@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+
+{% block content %}
+    <h5>== > {{theme_count}} deleted themes</h5>
+
+    <p>Select the theme you want to restore : </p>
+    <hr>
+    {% for theme in themes %}
+    <div>
+        <a href="{% url 'restore-theme' theme.id %}">Restore</a>
+        <h5> = > {{theme.name}}</h5>
+        <h5>Description : {{theme.description}}</h5>
+        <hr>
+    </div>
+    {% endfor %}
+    <a href="{% url 'theme' %}">Cancel</a>
+    <input type="Submit" value = "Confirm">
+
+{% endblock content%}

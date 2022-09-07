@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # MY APPS
-    'configuration.apps.BaseConfig'
+    # SPECTO APPS
+    'configuration.apps.ConfigurationConfig',
+    'vmq.apps.VmqConfig',
+
 ]
 
 MIDDLEWARE = [

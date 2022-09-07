@@ -3,7 +3,7 @@ from .models import Division, Program, Product, Workshop
 from .forms import DivisionForm, ProgramForm, ProductForm, WorkshopForm
 
 
-# CONFIGURATION VIEWS :
+# SPECTO VIEWS - CONFIGURATION :
 
 def home(request):
     return render(request,'configuration/home.html')

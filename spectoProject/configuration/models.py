@@ -3,7 +3,8 @@ from msilib.schema import Error
 from django.db import models
 
 
-# Create your models here.
+# SPECTO MODELS - CONFIGURATION :
+
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

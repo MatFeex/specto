@@ -1,0 +1,23 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div>
+    <h5>{{item_count}} items registered for this theme</h5>
+    <a href="{% url 'create-item' theme_id %}">Create An Item</a>
+    <a href="{% url 'deleted-item' theme_id %}">Restore An Item</a>
+
+    {% for item in items %}
+        <div>
+            <a href="{% url 'update-item' theme_id item.id %}">Edit</a>
+            <a href="{% url 'delete-item' theme_id item.id %}">Delete</a>
+
+            <h5> - <a href="">{{item.name}}</a> -- Theme : {{item.theme}}</h5>
+            <h5>Description : {{item.description}}</h5>
+            <hr>
+        </div>
+    {% endfor %}
+</div>
+
+
+{% endblock content%}
