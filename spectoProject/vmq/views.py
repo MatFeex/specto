@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
-from .models import Theme, Item
-from .forms import ThemeForm, ItemForm
+from .models import Theme, Item, Vmq
+from .forms import ThemeForm, ItemForm, VmqForm
 
 
 # SPECTO VIEWS : VMQ
@@ -119,3 +119,62 @@ def restore_item(request,theme_id, item_id):
     context = {'obj':item}
     return render(request,'vmq/restore.html',context)
     
+# CRUD-R for VMQ
+
+def read_vmq(request):
+    vmqs = Vmq.objects.all()
+    vmq_count = vmqs.count()
+    context = {'vmqs':vmqs,'vmq_count':vmq_count}
+    return render(request,'vmq/vmq/vmq.html',context)
+
+
+def read_deleted_vmq(request):
+    vmqs = Vmq.deleted_objects.all()
+    vmq_count = vmqs.count()
+    context = {'vmqs':vmqs,'vmq_count':vmq_count}
+    return render(request,'vmq/vmq/deleted_vmq.html',context)
+
+
+def create_vmq(request):
+    vmq_form = VmqForm()
+    if request.method == 'POST' :
+        vmq_form = VmqForm(request.POST)
+        if vmq_form.is_valid():
+            vmq = vmq_form.save(commit=False)
+            vmq.save()
+            vmq_form.save_m2m()
+            return redirect('vmq')
+    context = {'form':vmq_form, 'text':'Vmq'}
+    return render(request, 'vmq/form.html', context)
+
+
+def update_vmq(request,vmq_id):
+    vmq = Vmq.objects.get(id=vmq_id)
+    vmq_form = VmqForm(instance=vmq)
+    if request.method == 'POST' :
+        vmq_form = VmqForm(request.POST, instance=vmq)
+        if vmq_form.is_valid():
+            vmq = vmq_form.save(commit=False)
+            vmq.save()
+            vmq_form.save_m2m()
+            return redirect('vmq')
+    context = {'form':vmq_form}
+    return render(request, 'vmq/form.html', context)
+
+
+def delete_vmq(request,vmq_id):
+    vmq = Vmq.objects.get(id=vmq_id)
+    if request.method == 'POST' :
+        vmq.soft_deleted()
+        return redirect('vmq')
+    context = {'obj':vmq}
+    return render(request,'vmq/delete.html',context)
+
+
+def restore_vmq(request,vmq_id):
+    vmq = Vmq.deleted_objects.get(id=vmq_id)
+    if request.method == 'POST' :
+        vmq.restore()
+        return redirect('vmq')
+    context = {'obj':vmq}
+    return render(request,'vmq/restore.html',context)

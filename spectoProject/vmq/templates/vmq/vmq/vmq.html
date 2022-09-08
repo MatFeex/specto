@@ -1,0 +1,23 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div>
+    <h5>{{vmq_count}} VMQs registered </h5>
+    <a href="{% url 'create-vmq' %}">Create A VMQ</a>
+    <a href="{% url 'deleted-vmq' %}">Restore A VMQ</a>
+
+    {% for vmq in vmqs %}
+        <div>
+            <a href="{% url 'update-vmq' vmq.id %}">Edit</a>
+            <a href="{% url 'delete-vmq' vmq.id %}">Delete</a>
+
+            <h5> - <a href="">{{vmq.reference}}</a> -- Workshop : {{vmq.workshop}}</h5>
+            <h5>Comment : {{vmq.comment}}</h5>
+            <hr>
+        </div>
+    {% endfor %}
+</div>
+
+
+{% endblock content%}

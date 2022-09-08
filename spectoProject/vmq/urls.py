@@ -19,4 +19,12 @@ urlpatterns = [
     path('vmq/theme/<theme_id>/item/<item_id>/update-item/',views.update_item, name="update-item"),
     path('vmq/theme/<theme_id>/item/<item_id>/delete-item/',views.delete_item, name="delete-item"),
     path('vmq/theme/<theme_id>/item/<item_id>/restore-item/',views.restore_item, name="restore-item"),
+    
+    # urls for VMQ
+    path('vmq/deleted-vmq/',views.read_deleted_vmq, name="deleted-vmq"),
+    path('vmq/',views.read_vmq, name="vmq"),
+    path('vmq/create-vmq/',views.create_vmq, name="create-vmq"),
+    path('vmq/<vmq_id>/update-vmq/',views.update_vmq, name="update-vmq"),
+    path('vmq/<vmq_id>/delete-vmq/',views.delete_vmq, name="delete-vmq"),
+    path('vmq/<vmq_id>/restore-vmq/',views.restore_vmq, name="restore-vmq"),
 ]

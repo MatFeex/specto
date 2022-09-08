@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # SPECTO APPS
+    # SPECTO - APPS
     'configuration.apps.ConfigurationConfig',
     'vmq.apps.VmqConfig',
 
