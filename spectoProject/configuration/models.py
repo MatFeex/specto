@@ -1,3 +1,5 @@
+from __future__ import division
+from distutils.command.upload import upload
 from django.utils import timezone
 from msilib.schema import Error
 from django.db import models
@@ -90,4 +92,30 @@ class Workshop(BaseModel,SoftDeleteModel):
     def __str__(self):
         return self.name
 
+class EmployeeFile(models.Model):
+    employee_data_file = models.FileField(upload_to='configuration/handle_uploaded_file') # to create a file input in templates
+
+class Employee(models.Model): # does not inherit from BaseModel/SoftDeleteModel because managed from upload
+
+    matricule = models.IntegerField()
+    names = models.CharField(max_length= 100)
+    i_p = models.CharField(max_length=2)
+    code = models.CharField(max_length=50)
+    department = models.CharField(max_length=50)
+    program = models.ForeignKey(Program,on_delete=models.CASCADE)
+    product = models.ForeignKey(Product,on_delete=models.CASCADE)
+    workshop = models.ForeignKey(Workshop,on_delete=models.CASCADE)
+    wording = models.CharField(max_length=100)
+    cost_center = models.CharField(max_length=30)
+    job_bulletin = models.CharField(max_length=100)
+    resp_matricule_n1 = models.IntegerField()
+    resp_names_n1 = models.CharField(max_length=100)
+    resp_matricule_n2 = models.IntegerField()
+    resp_names_n2 = models.CharField(max_length=100)
+    staff_tab_afs = models.CharField(max_length=50)
+    
+    division = models.ForeignKey(Division,on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.names)
 

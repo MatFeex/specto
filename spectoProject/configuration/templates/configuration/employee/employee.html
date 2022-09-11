@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div>
+    <h5>{{employee_count}} employees registered for this division </h5>
+    <a href="{% url 'upload-employee' %}">Upload/Update - Employees </a>
+
+    {% for employee in employees %}
+        <div>
+            <h5> - {{employee.names}}</h5>
+            <h5>Matricule : {{employee.matricule}}</h5>
+            <hr>
+        </div>
+    {% endfor %}
+</div>
+
+
+{% endblock content%}

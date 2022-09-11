@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Theme, Item, Vmq
 from .forms import ThemeForm, ItemForm, VmqForm
+from django.contrib import messages
 
 
 # SPECTO VIEWS : VMQ
@@ -28,6 +29,7 @@ def create_theme(request):
         if form.is_valid(): 
             form.save()
             return redirect('theme')
+        else : messages.error(request, 'An error occurred while adding the theme')
     context = {'form':form, 'text':'Theme'}
     return render(request, 'vmq/form.html', context)
 
@@ -40,6 +42,7 @@ def update_theme(request,theme_id):
         if form.is_valid() : 
             form.save()
             return redirect('theme')
+        else : messages.error(request, 'An error occurred while updating the theme')
     context = {'form':form}
     return render(request, 'vmq/form.html', context)
 
@@ -86,6 +89,7 @@ def create_item(request, theme_id):
         if form.is_valid(): 
             form.save()
             return redirect(f'/vmq/theme/{theme_id}/item/')
+        else : messages.error(request, 'An error occurred while adding the item')
     context = {'form':form, 'text':'Item'}
     return render(request, 'vmq/form.html', context)
 
@@ -98,6 +102,7 @@ def update_item(request,theme_id, item_id):
         if form.is_valid() : 
             form.save()
             return redirect(f'/vmq/theme/{theme_id}/item/')
+        else : messages.error(request, 'An error occurred while updating the item')
     context = {'form':form}
     return render(request, 'vmq/form.html', context)
 
@@ -144,6 +149,7 @@ def create_vmq(request):
             vmq.save()
             vmq_form.save_m2m()
             return redirect('vmq')
+        else : messages.error(request, 'An error occurred while adding the VMQ')
     context = {'form':vmq_form, 'text':'Vmq'}
     return render(request, 'vmq/form.html', context)
 
@@ -158,6 +164,7 @@ def update_vmq(request,vmq_id):
             vmq.save()
             vmq_form.save_m2m()
             return redirect('vmq')
+        else : messages.error(request, 'An error occurred while updating the VMQ')
     context = {'form':vmq_form}
     return render(request, 'vmq/form.html', context)
 

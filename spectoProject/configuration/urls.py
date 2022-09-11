@@ -38,4 +38,9 @@ urlpatterns = [
     path('configuration/division/<division_id>/program/<program_id>/product/<product_id>/workshop/<workshop_id>/update-workshop/',views.update_workshop, name="update-workshop"),
     path('configuration/division/<division_id>/program/<program_id>/product/<product_id>/workshop/<workshop_id>/delete-workshop/',views.delete_workshop, name="delete-workshop"),
     path('configuration/division/<division_id>/program/<program_id>/product/<product_id>/workshop/<workshop_id>/restore-workshop/',views.restore_workshop, name="restore-workshop"),
+
+
+    # urls for EMPLOYEE
+    path('configuration/employee/',views.read_employee, name="employee"),
+    path('configuration/employee/upload-employee/',views.upload_employee, name="upload-employee"),
 ]
