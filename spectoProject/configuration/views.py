@@ -1,3 +1,4 @@
+from itertools import product
 from django.shortcuts import render, redirect
 from .models import Division, Employee, Program, Product, Workshop
 from .forms import DivisionForm, EmployeeFileForm, ProgramForm, ProductForm, WorkshopForm
@@ -285,11 +286,48 @@ def upload_employee(request):
                 # DELETE PREVIOUS EMPLOYEE DATA IN EMPLOYEE DATABASE
                 Employee.objects.all().delete()
 
+                # DATA PROCESSING
+                data = pd.read_excel(file_path) # read the new uploaded file
+                
+                # get objects
+                programs = Program.objects.values('name','id')
+                products = Product.objects.values('name','id')
+                workshops = Workshop.objects.values('name','id')
+
+                # obj to df
+                df_programs = pd.DataFrame(list(programs))
+                df_products = pd.DataFrame(list(products))
+                df_workshop = pd.DataFrame(list(workshops))
+                
+                # df to dict
+                dict_programs = dict(zip(df_programs.name,df_programs.id))
+                dict_products = dict(zip(df_products.name,df_products.id))
+                dict_workshop = dict(zip(df_workshop.name,df_workshop.id))
+
+                # mapping
+                program_id = data['Affaire'].map(dict_programs).values[0]
+                product_id = data['Produit'].map(dict_products).values[0]
+                workshop_id = data['Phase'].map(dict_workshop).values[0]
+            
+                # give default ID if cannot map
+                program_id = int(str(program_id).replace('nan','1'))
+                product_id = int(str(product_id).replace('nan','1'))
+                workshop_id = int(str(workshop_id).replace('nan','1'))
+
+                # delete useless columns
+                data = data.drop(columns=['Affaire', 'Produit','Phase'])
+
+                data.insert(13,'division_id',1) # add DIVISION column that doesn't exist in the file
+                data.insert(14,'program_id',program_id)
+                data.insert(15,'product_id',product_id)
+                data.insert(16,'workshop_id',workshop_id)
+
+                print(data)
+
+                
                 # CONNETION TO DATABASE
                 conn = psycopg2.connect(host='localhost',dbname='specto_db',user='postgres',password='specto777',port='5432')
 
-                data = pd.read_excel(file_path) # read the new uploaded file
-                data.insert(16,'division_id',1) # add division column that doesn't exist in the file
                 empoyee_file = StringIO()
                 empoyee_file.write(data.to_csv(index=None, header=None,sep=';'))
                 empoyee_file.seek(0)
@@ -305,9 +343,6 @@ def upload_employee(request):
                             'i_p',
                             'code', 
                             'department',
-                            'program_id',
-                            'product_id',
-                            'workshop_id',
                             'wording',
                             'cost_center',
                             'job_bulletin',
@@ -317,6 +352,9 @@ def upload_employee(request):
                             'resp_names_n2',
                             'staff_tab_afs',
                             'division_id',
+                            'program_id',
+                            'product_id',
+                            'workshop_id',
                         ]
                     )
                 conn.commit()
