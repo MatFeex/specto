@@ -1,11 +1,15 @@
 {% extends 'main.html' %}
 
+{% load crispy_forms_tags %}
+
+
 {% block content %}
+
 <div>
     <h5>CREATE A {{text}}</h5>
     <form method = "POST" action="">
         {% csrf_token %}
-        {{form.as_p}}
+        {{form|crispy}}
         <input type="submit" value="Submit">
 
     </form>
