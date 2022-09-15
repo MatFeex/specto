@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<div>
+<!-- <div>
     <h5>{{division_count}} divisions registered</h5>
     <a href="{% url 'create-division' %}">Create A Division</a>
     <a href="{% url 'deleted-division' %}">Restore A Division</a>
@@ -17,27 +17,63 @@
             <hr>
         </div>
     {% endfor %}
-</div>
-<div class="col-lg-6 mb-lg-0 mb-4 offset-2"> 
-    <div class="card z-index-2 " height="10">
+</div> -->
+
+
+<div class="col-12">
+    <div class="card mb-4">
         <div class="card-header pb-0">
-        <h6>CREATE NEW PRODUCT</h6>
+        <h6>List Division: {{division_count}}</h6>
+        <hr>
+        <a class="btn bg-gradient-dark  mb-0" href="{% url 'create-division' %}" style="float: left;"><i class=" fas fa-plus " aria-hidden="true"  ></i>&nbsp;&nbsp;Create division</a>
+        </br>
         </div>
         <div class="card-body px-0 pt-0 pb-2">
-            <form action="" method="">  
-                <label  for="Name"> Name :</label>
-                <input type ="text" id="Name " name="Name"  class="form-control"> 
-                <br>  
-                <label  for="Comment"> Comment:</label>
-                <input type ="text" id="Comment " name="Comment"  class="form-control"> 
-                </select> 
-                <br>
-                <center> <input  type="submit" value="Submit" class="btn btn-outline-primary btn-sm mb-0 me-3" ></center>
-            </form> 
+        <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+            <thead>
+            <tr>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Location</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Description</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Programs</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    {% for division in divisions %}
+
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{division.name}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{division.location}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{division.description}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <a href="{% url 'update-division' division.id %}">Edit</a>
+                            <a href="{% url 'delete-division' division.id %}">Delete</a>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold"><a href="{% url 'program' division.id %}">Programs</a></span>
+                        </td>
+
+                    {% empty %}
+                    <td class="align-middle text-center">
+                        <span class="text-secondary text-xs font-weight-bold">No Data</span>
+                    </td>
+                    {% endfor %}
+                    
+                </tr>
+            </tbody>
+            </table>
+        </div>
         </div>
     </div>
 </div>
-
 
 
 

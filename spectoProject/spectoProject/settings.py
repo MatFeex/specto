@@ -88,7 +88,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'specto_db',
         'USER': 'postgres',
-        'PASSWORD': 'specto777',
+        'PASSWORD': '054Ibiza',
         'HOST': 'localhost',
         'PORT': '5432',
     }
