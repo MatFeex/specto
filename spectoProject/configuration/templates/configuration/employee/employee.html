@@ -2,18 +2,116 @@
 
 {% block content %}
 
-<div>
-    <h5>{{employee_count}} employees registered for this division </h5>
-    <a href="{% url 'upload-employee' %}">Upload/Update - Employees </a>
-
-    {% for employee in employees %}
-        <div>
-            <h5> - {{employee.names}}</h5>
-            <h5>Matricule : {{employee.matricule}}</h5>
+<div class="col-12">
+    <div class="card mb-4">
+        <div class="card-header pb-0">
+            <style>
+                .container{
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .container h6{
+                    margin-top: .5em;
+                }
+                .restore{
+                    margin-left: 11em;
+                }
+            </style>
+            <div class="container">
+                <h6>EMPLOYEES : {{employee_count}} registered</h6>
+                <a class="btn bg-gradient-dark  mb-0" href="{% url 'upload-employee' %}" style="float: left;"><i class=" fas fa-plus " aria-hidden="true"  ></i>&nbsp;&nbsp;Upload employees</a>
+            </div>
             <hr>
         </div>
-    {% endfor %}
+        <div class="card-body px-0 pt-0 pb-2">
+        <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+            <thead>
+            <tr>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Matricule</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Names</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">I/P</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Code</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Department</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Program</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Product</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Workshop</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Wording</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Cost Center</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Job Bulletin</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Matricule n+1</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Names n+1</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Matricule n+2</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Names n+2</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">AFS Staff Tab</th>
+            </tr>
+            </thead>
+            <tbody>
+                    {% for employee in employees %}
+                        <tr>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{employee.matricule}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{employee.names}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{employee.i_p}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{employee.code}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{employee.department}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{employee.program}}</span>
+                            </td>                          
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{employee.product}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{employee.workshop}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{employee.wording}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{employee.cost_center}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{employee.job_bulletin}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{employee.resp_matricule_n1}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{employee.resp_names_n1}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{employee.resp_matricule_n2}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{employee.resp_names_n2}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{employee.staff_tab_afs}}</span>
+                            </td>
+
+                        {% empty %}
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">No data</span>
+                            </td>
+                        </tr>    
+                    {% endfor %}                
+            </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
 </div>
 
-
 {% endblock content%}
+
+
+

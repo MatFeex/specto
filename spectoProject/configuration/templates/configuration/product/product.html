@@ -2,6 +2,93 @@
 
 {% block content %}
 
+<div class="col-12">
+    <div class="card mb-4">
+        <div class="card-header pb-0">
+            <style>
+                .container{
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .container h6{
+                    margin-top: .5em;
+                }
+                .container-btn{
+                    display: flex;
+                }
+                .middle-btn{
+                    margin:0 .5em 0 1em;
+                }
+                .first-btn{
+                    margin-top:.3em;
+                }
+            </style>
+
+            <div class="container">
+                <h6>PROGRAMS : {{program_count}} registered for this division</h6>
+                <div class="container-btn">
+                    <div class="first-btn">
+                        <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'program' division_id %}">BACK</a>
+                    </div>
+                    <div class="middle-btn">
+                        <a class="btn bg-gradient-dark  mb-0" href="{% url 'create-product' division_id program_id %}" style="float: left;"><i class=" fas fa-plus " aria-hidden="true"  ></i>&nbsp;&nbsp;Create product</a>
+                    </div>
+                    <a class="btn bg-gradient-dark  mb-0" href="{% url 'deleted-product' division_id program_id %}" style="float: left;"><i class=" fas fa-undo " aria-hidden="true"  ></i>&nbsp;&nbsp;Restore product</a>
+
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+        <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+            <thead>
+            <tr>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Program</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Description</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Products</th>
+            </tr>
+            </thead>
+            <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{product.program}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{product.name}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{product.description}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <a href="{% url 'update-product' division_id program_id product.id %}">Edit</a>
+                            <a href="{% url 'delete-product' division_id program_id product.id %}">Delete</a>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold"><a href="{% url 'workshop' division_id program_id product.id %}">Workshops</a></span>
+                        </td>
+
+                    {% empty %}
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">No data</span>
+                        </td>
+                    </tr>    
+                    {% endfor %}
+                    
+                
+            </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content%}
+
+<!--  
 <div>
     <h5>{{product_count}} products registered for this program</h5>
     <a href="{% url 'create-product' division_id program_id %}">Create A Product</a>
@@ -17,7 +104,4 @@
             <hr>
         </div>
     {% endfor %}
-</div>
-
-
-{% endblock content%}
+</div> -->

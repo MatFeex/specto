@@ -39,11 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'crispy_forms',
+
     # SPECTO - APPS
     'configuration.apps.ConfigurationConfig',
     'vmq.apps.VmqConfig',
-
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -88,7 +90,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'specto_db',
         'USER': 'postgres',
-        'PASSWORD': '054Ibiza',
+        'PASSWORD': 'specto777',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -131,7 +133,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS=[
-    BASE_DIR / "static"
+    BASE_DIR / "templates/static"
 ]
 
 # Default primary key field type

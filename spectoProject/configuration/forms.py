@@ -12,19 +12,19 @@ class DivisionForm(ModelForm):
 class ProgramForm(ModelForm):
     class Meta:
         model = Program
-        fields = ['division','name','description']
+        fields = ['name','description']
 
 
 class ProductForm(ModelForm):
     class Meta:
         model = Product
-        fields = ['program','name','description']
+        fields = ['name','description']
 
 
 class WorkshopForm(ModelForm):
     class Meta:
         model = Workshop
-        fields = ['product','name','description']
+        fields = ['name','description']
 
 
 class EmployeeForm(ModelForm):

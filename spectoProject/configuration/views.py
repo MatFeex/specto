@@ -39,7 +39,7 @@ def create_division(request):
             form.save()
             return redirect('division')
         else : messages.error(request, 'An error occurred while adding a division')
-    context = {'form':form, 'text':'Division'}
+    context = {'form':form, 'text':'DIVISION'}
     return render(request, 'configuration/form.html', context)
 
 
@@ -96,10 +96,13 @@ def create_program(request, division_id):
     if request.method == 'POST' :
         form = ProgramForm(request.POST)
         if form.is_valid(): 
-            form.save()
+            form.division_id = division_id
+            f = form.save(commit=False)
+            f.division_id = division_id
+            f.save()
             return redirect(f'/configuration/division/{division_id}/program/')
         else : messages.error(request, 'An error occurred while adding the program')
-    context = {'form':form, 'text':'Program'}
+    context = {'form':form, 'text':'PROGRAM'}
     return render(request, 'configuration/form.html', context)
 
 
@@ -109,7 +112,10 @@ def update_program(request,division_id, program_id):
     if request.method == 'POST' :
         form = ProgramForm(request.POST, instance=program)
         if form.is_valid() : 
-            form.save()
+            form.division_id = division_id
+            f = form.save(commit=False)
+            f.division_id = division_id
+            f.save()
             return redirect(f'/configuration/division/{division_id}/program/')
         else : messages.error(request, 'An error occurred while updating the program')
     context = {'form':form}
@@ -156,10 +162,13 @@ def create_product(request, division_id, program_id):
     if request.method == 'POST' :
         form = ProductForm(request.POST)
         if form.is_valid(): 
-            form.save()
+            form.program_id = program_id
+            f = form.save(commit=False)
+            f.program_id = program_id
+            f.save()
             return redirect(f'/configuration/division/{division_id}/program/{program_id}/product/')
         else : messages.error(request, 'An error occurred while adding the product')
-    context = {'form':form, 'text':'Product'}
+    context = {'form':form, 'text':'PRODUCT'}
     return render(request, 'configuration/form.html', context)
 
 
@@ -170,7 +179,10 @@ def update_product(request,division_id, program_id, product_id):
     if request.method == 'POST' :
         form = ProgramForm(request.POST, instance=product)
         if form.is_valid() : 
-            form.save()
+            form.program_id = program_id
+            f = form.save(commit=False)
+            f.program_id = program_id
+            f.save()
             return redirect(f'/configuration/division/{division_id}/program/{program_id}/product/')
         else : messages.error(request, 'An error occurred while updating the product')
     context = {'form':form}
@@ -217,10 +229,13 @@ def create_workshop(request, division_id, program_id, product_id):
     if request.method == 'POST' :
         form = WorkshopForm(request.POST)
         if form.is_valid(): 
-            form.save()
+            form.product_id = product_id
+            f = form.save(commit=False)
+            f.product_id = product_id
+            f.save()
             return redirect(f'/configuration/division/{division_id}/program/{program_id}/product/{product_id}/workshop/')
         else : messages.error(request, 'An error occurred while adding the workshop')
-    context = {'form':form, 'text':'Workshop'}
+    context = {'form':form, 'text':'WORKSHOP'}
     return render(request, 'configuration/form.html', context)
 
 
@@ -231,7 +246,10 @@ def update_workshop(request,division_id, program_id, product_id, workshop_id):
     if request.method == 'POST' :
         form = WorkshopForm(request.POST, instance=workshop)
         if form.is_valid() : 
-            form.save()
+            form.product_id = product_id
+            f = form.save(commit=False)
+            f.product_id = product_id
+            f.save()
             return redirect(f'/configuration/division/{division_id}/program/{program_id}/product/{product_id}/workshop/')
         else : messages.error(request, 'An error occurred while updating the workshop')
     context = {'form':form}

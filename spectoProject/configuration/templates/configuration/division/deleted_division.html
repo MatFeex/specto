@@ -1,19 +1,107 @@
 {% extends 'main.html' %}
 
 {% block content %}
-    <h5>== > {{division_count}} deleted divisions</h5>
 
-    <p>Select the division you want to restore : </p>
+<div class="col-12">
+    <div class="card mb-4">
+        <div class="card-header pb-0">
+            <style>
+                .container{
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .align-middle a{
+                    font-weight: bold;
+                    color: #489835;
+                    margin: .2em;
+                } 
+            </style>
+            <div class="container">
+                <h6>DIVISIONS : {{division_count}} deleted</h6>
+                <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'division' %}">Cancel</a>
+            </div>
+            <hr>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+        <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+            <thead>
+            <tr>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Location</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Description</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+                    {% for division in divisions %}
+                    <tr>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{division.name}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{division.location}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{division.description}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <a href="{% url 'restore-division' division.id %}"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;&nbsp;Restore</a>
+                        </td>
 
-    {% for division in divisions %}
-    <div>
-        <a href="{% url 'restore-division' division.id %}">Restore</a>
-        <h5> - {{division.name}} -- Location : {{division.location}}</h5>
-        <h5>Description : {{division.description}}</h5>
-        <hr>
+                    {% empty %}
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">No data</span>
+                        </td>
+                    </tr>    
+                    {% endfor %}
+                    
+                
+            </tbody>
+            </table>
+        </div>
+        </div>
     </div>
-    {% endfor %}
-    <a href="{% url 'division' %}">Cancel</a>
-    <input type="Submit" value = "Confirm">
+</div>
 
 {% endblock content%}
+
+
+
+
+<!-- <div>
+    <h5>{{division_count}} divisions registered</h5>
+    <a href="{% url 'create-division' %}">Create A Division</a>
+    <a href="{% url 'deleted-division' %}">Restore A Division</a>
+
+    {% for division in divisions %}
+        <div>
+            <a href="{% url 'update-division' division.id %}">Edit</a>
+            <a href="{% url 'delete-division' division.id %}">Delete</a>
+
+            <h5> - <a href="{% url 'program' division.id %}">{{division.name}}</a> -- Location : {{division.location}}</h5>
+            <h5>Description : {{division.description}}</h5>
+            <hr>
+        </div>
+    {% endfor %}
+</div> -->
+
+
+
+
+
+
+
+<!-- <h5>== > {{division_count}} deleted divisions</h5>
+
+<p>Select the division you want to restore : </p>
+
+{% for division in divisions %}
+<div>
+    <a href="{% url 'restore-division' division.id %}">Restore</a>
+    <h5> - {{division.name}} -- Location : {{division.location}}</h5>
+    <h5>Description : {{division.description}}</h5>
+    <hr>
+</div>
+{% endfor %}
+<a href="{% url 'division' %}">Cancel</a> -->

@@ -2,22 +2,83 @@
 
 {% block content %}
 
-<div>
-    <h5>{{workshop_count}} workshops registered for this product</h5>
-    <a href="{% url 'create-workshop' division_id program_id product_id %}">Create A Workshop</a>
-    <a href="{% url 'deleted-workshop' division_id program_id product_id %}">Restore A Workshop</a>
+<div class="col-12">
+    <div class="card mb-4">
+        <div class="card-header pb-0">
+            <style>
+                .container{
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .container h6{
+                    margin-top: .5em;
+                }
+                .container-btn{
+                    display: flex;
+                }
+                .middle-btn{
+                    margin:0 .5em 0 1em;
+                }
+                .first-btn{
+                    margin-top:.3em;
+                }
+            </style>
 
-    {% for workshop in workshops %}
-        <div>
-            <a href="{% url 'update-workshop' division_id program_id product_id workshop.id %}">Edit</a>
-            <a href="{% url 'delete-workshop' division_id program_id product_id workshop.id %}">Delete</a>
-
-            <h5> - <a href="">{{workshop.name}}</a> -- Product : {{workshop.product}}</h5>
-            <h5>Description : {{workshop.description}}</h5>
+            <div class="container">
+                <h6>WORKSHOPS : {{workshop_count}} registered for this product</h6>
+                <div class="container-btn">
+                    <div class="first-btn">
+                        <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'product' division_id program_id %}">BACK</a>
+                    </div>
+                    <div class="middle-btn">
+                        <a class="btn bg-gradient-dark  mb-0" href="{% url 'create-workshop' division_id program_id product_id %}" style="float: left;"><i class=" fas fa-plus " aria-hidden="true"  ></i>&nbsp;&nbsp;Create workshop</a>
+                    </div>
+                    <a class="btn bg-gradient-dark  mb-0" href="{% url 'deleted-workshop' division_id program_id product_id %}" style="float: left;"><i class=" fas fa-undo " aria-hidden="true"  ></i>&nbsp;&nbsp;Restore workshop</a>
+                </div>
+            </div>
             <hr>
         </div>
-    {% endfor %}
-</div>
+        <div class="card-body px-0 pt-0 pb-2">
+        <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+            <thead>
+            <tr>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Product</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Description</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+                    {% for workshop in workshops %}
+                    <tr>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{workshop.product}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{workshop.name}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{workshop.description}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <a href="{% url 'update-workshop' division_id program_id product_id workshop.id %}">Edit</a>
+                            <a href="{% url 'delete-workshop' division_id program_id product_id workshop.id %}">Delete</a>
+                        </td>
 
+                    {% empty %}
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">No data</span>
+                        </td>
+                    </tr>    
+                    {% endfor %}
+                    
+                
+            </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+</div>
 
 {% endblock content%}

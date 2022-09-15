@@ -1,19 +1,67 @@
 {% extends 'main.html' %}
 
 {% block content %}
-    <h5>== > {{program_count}} deleted programs for this division</h5>
 
-    <p>Select the program you want to restore : </p>
+<div class="col-12">
+    <div class="card mb-4">
+        <div class="card-header pb-0">
+            <style>
+                .container{
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .align-middle a{
+                    font-weight: bold;
+                    color: #489835;
+                    margin: .2em;
+                } 
+            </style>
 
-    {% for program in programs %}
-    <div>
-        <a href="{% url 'restore-program' division_id program.id %}">Restore</a>
-        <h5> - <a href="">{{program.name}}</a> -- Division : {{program.division}}</h5>
-        <h5>Description : {{program.description}}</h5>
-        <hr>
+            <div class="container">
+                <h6>PROGRAMS : {{program_count}} deleted for this division</h6>
+                <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'program' division_id %}">Cancel</a>
+            </div>
+            <hr>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+        <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+            <thead>
+            <tr>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Division</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Name</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Description</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+                    {% for program in programs %}
+                    <tr>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{program.division}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{program.name}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{program.description}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <a href="{% url 'restore-program' division_id program.id %}"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;&nbsp;Restore</a>
+                        </td>
+
+                    {% empty %}
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">No data</span>
+                        </td>
+                    </tr>    
+                    {% endfor %}
+            </tbody>
+            </table>
+        </div>
+        </div>
     </div>
-    {% endfor %}
-    <a href="{% url 'program' division_id %}">Cancel</a>
-    <input type="Submit" value = "Confirm">
+</div>
 
 {% endblock content%}
+
