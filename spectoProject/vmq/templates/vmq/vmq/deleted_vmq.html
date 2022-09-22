@@ -1,19 +1,91 @@
 {% extends 'main.html' %}
 
 {% block content %}
-    <h5>== > {{vmq_count}} deleted VMQs </h5>
 
-    <p>Select the VMQ you want to restore : </p>
+<div class="col-12">
+    <div class="card mb-4">
+        <div class="card-header pb-0">
+            <style>
+                .container{
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .align-middle a{
+                    font-weight: bold;
+                    color: #489835;
+                    margin: .2em;
+                } 
+            </style>
 
-    {% for vmq in vmqs %}
-    <div>
-        <a href="{% url 'restore-vmq' vmq.id %}">Restore</a>
-        <h5> - <a href="">{{vmq.reference}}</a> -- Workshop : {{vmq.workshop}}</h5>
-        <h5>Comment : {{vmq.comment}}</h5>
-        <hr>
+            <div class="container">
+                <h6>VMQs : {{vmq_count}} deleted</h6>
+                <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'vmq' %}">Cancel</a>
+            </div>
+            <hr>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+        <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+                <thead>
+                <tr>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">VMQ Ref</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Visit Date</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Visitor</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Visited</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Workshop</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Items</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Result</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Type</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comment</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                        {% for vmq in vmqs %}
+                        <tr>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{vmq.reference}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{vmq.visit_date}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{vmq.user}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{vmq.employee}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{vmq.workshop}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{vmq.items}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{vmq.result}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{vmq.type}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">{{vmq.comment}}</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <a href="{% url 'restore-vmq' vmq.id %}"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;&nbsp;Restore</a>
+                            </td>
+    
+                        {% empty %}
+                            <td class="align-middle text-center">
+                                <span class="text-secondary text-xs font-weight-bold">No data</span>
+                            </td>
+                        </tr>    
+                        {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        </div>
     </div>
-    {% endfor %}
-    <a href="{% url 'vmq' %}">Cancel</a>
-    <input type="Submit" value = "Confirm">
+</div>
 
 {% endblock content%}
+

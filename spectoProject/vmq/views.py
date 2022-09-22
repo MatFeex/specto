@@ -1,10 +1,15 @@
 from django.shortcuts import render, redirect
-from .models import Theme, Item, Vmq
-from .forms import ThemeForm, ItemForm, VmqForm
+
+from configuration.models import Workshop
+from .models import Theme, Item, Vmq, VmqItem
+from .forms import ThemeForm, ItemForm, VmqForm, VmqItemForm
 from django.contrib import messages
 
 
 # SPECTO VIEWS : VMQ
+
+def read_vmq_choice(request):
+    return render(request,'vmq/vmq_choice.html')
 
 # CRUD-R for THEME
 
@@ -30,7 +35,7 @@ def create_theme(request):
             form.save()
             return redirect('theme')
         else : messages.error(request, 'An error occurred while adding the theme')
-    context = {'form':form, 'text':'Theme'}
+    context = {'form':form, 'text':'CREATE A NEW THEME'}
     return render(request, 'vmq/form.html', context)
 
 
@@ -43,7 +48,7 @@ def update_theme(request,theme_id):
             form.save()
             return redirect('theme')
         else : messages.error(request, 'An error occurred while updating the theme')
-    context = {'form':form}
+    context = {'form':form, 'text':'UPDATE THE THEME'}
     return render(request, 'vmq/form.html', context)
 
 
@@ -86,11 +91,14 @@ def create_item(request, theme_id):
     form = ItemForm()
     if request.method == 'POST' :
         form = ItemForm(request.POST)
-        if form.is_valid(): 
-            form.save()
+        if form.is_valid() : 
+            form.theme_id = theme_id
+            f = form.save(commit=False)
+            f.theme_id = theme_id
+            f.save()
             return redirect(f'/vmq/theme/{theme_id}/item/')
         else : messages.error(request, 'An error occurred while adding the item')
-    context = {'form':form, 'text':'Item'}
+    context = {'form':form, 'text':'CREATE A NEW ITEM'}
     return render(request, 'vmq/form.html', context)
 
 
@@ -100,10 +108,13 @@ def update_item(request,theme_id, item_id):
     if request.method == 'POST' :
         form = ItemForm(request.POST, instance=item)
         if form.is_valid() : 
-            form.save()
+            form.theme_id = theme_id
+            f = form.save(commit=False)
+            f.theme_id = theme_id
+            f.save()
             return redirect(f'/vmq/theme/{theme_id}/item/')
         else : messages.error(request, 'An error occurred while updating the item')
-    context = {'form':form}
+    context = {'form':form, 'text':'UPDATE THE ITEM'}
     return render(request, 'vmq/form.html', context)
 
 
@@ -133,6 +144,15 @@ def read_vmq(request):
     return render(request,'vmq/vmq/vmq.html',context)
 
 
+def read_specific_vmq(request,vmq_id):
+    vmq = Vmq.objects.get(id=vmq_id)
+    items = Item.objects.all() # to display items
+    vmq_items = VmqItem.objects.filter(vmq_id=vmq_id) # ITEMS for the specific VMQ
+    zip_items = zip(items,vmq_items) # zip to easy access in template
+    context = {'vmq':vmq,'zip_items':zip_items}
+    return render(request,'vmq/vmq/vmq_details.html',context)
+
+
 def read_deleted_vmq(request):
     vmqs = Vmq.deleted_objects.all()
     vmq_count = vmqs.count()
@@ -141,32 +161,85 @@ def read_deleted_vmq(request):
 
 
 def create_vmq(request):
-    vmq_form = VmqForm()
+
     if request.method == 'POST' :
+
+        # GET INPUTS
+        item_ids = request.POST.getlist('item-id')
+        results = request.POST.getlist('result')
+        types = request.POST.getlist('type')
+        comments = request.POST.getlist('comment')
+        
+        # VMQ FORM
         vmq_form = VmqForm(request.POST)
+
         if vmq_form.is_valid():
-            vmq = vmq_form.save(commit=False)
-            vmq.save()
-            vmq_form.save_m2m()
+
+            # SAVE PARENT
+            vmq_form.save()
+
+            # CHILDS - VMQ_Item - ManyToMany  
+            for i in range(len(item_ids)) : 
+                VmqItem.objects.create( item = Item.objects.get(id=item_ids[i]),
+                                        vmq = Vmq.objects.get(id = vmq_form.instance.id),
+                                        result = results[i],
+                                        type = types[i],
+                                        comment = comments[i],
+                                        )
             return redirect('vmq')
-        else : messages.error(request, 'An error occurred while adding the VMQ')
-    context = {'form':vmq_form, 'text':'Vmq'}
-    return render(request, 'vmq/form.html', context)
+
+        else : messages.error(request, 'An error occurred while creating the VMQ')
+
+    else : vmq_form = VmqForm()
+
+    items = Item.objects.all()
+    context = {'vmq_form':vmq_form,'text':'CREATE A NEW VMQ','items':items}
+    return render(request, 'vmq/vmq/vmq_form.html', context)
 
 
 def update_vmq(request,vmq_id):
     vmq = Vmq.objects.get(id=vmq_id)
-    vmq_form = VmqForm(instance=vmq)
+
     if request.method == 'POST' :
-        vmq_form = VmqForm(request.POST, instance=vmq)
+
+        # GET INPUTS
+        item_ids = request.POST.getlist('item-id')
+        results = request.POST.getlist('result')
+        types = request.POST.getlist('type')
+        comments = request.POST.getlist('comment')
+        
+        # VMQ FORM
+        vmq_form = VmqForm(request.POST, instance = vmq)
+
         if vmq_form.is_valid():
-            vmq = vmq_form.save(commit=False)
-            vmq.save()
-            vmq_form.save_m2m()
+
+            # SAVE PARENT
+            vmq_form.save()
+
+            # Delete previous CHILDS
+            VmqItem.objects.filter(vmq_id=vmq_id).delete()
+
+            # NEW CHILDS - VMQ_Item - ManyToMany  
+            for i in range(len(item_ids)) : 
+                VmqItem.objects.create( item = Item.objects.get(id=item_ids[i]),
+                                        vmq = Vmq.objects.get(id = vmq_form.instance.id),
+                                        result = results[i],
+                                        type = types[i],
+                                        comment = comments[i],
+                                        )
             return redirect('vmq')
+
         else : messages.error(request, 'An error occurred while updating the VMQ')
-    context = {'form':vmq_form}
-    return render(request, 'vmq/form.html', context)
+
+    else : vmq_form = VmqForm(instance=vmq)
+
+
+    items = Item.objects.all() # to display items
+    vmq_items = VmqItem.objects.filter(vmq_id=vmq_id) # ITEMS for the specific VMQ
+    zip_items = zip(items,vmq_items) # zip to easy access in template
+
+    context = {'vmq_form':vmq_form,'zip_items':zip_items}
+    return render(request, 'vmq/vmq/vmq_update_form.html', context)
 
 
 def delete_vmq(request,vmq_id):

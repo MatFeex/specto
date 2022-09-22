@@ -3,6 +3,17 @@
 {% block content %}
 
 <div class="col-12">
+
+    <style>
+        .first-btn{
+            margin-left: 1em;
+            margin-bottom: 1em;
+        }
+    </style>
+    <div class="first-btn">
+        <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'product' division_id program_id %}">BACK</a>
+    </div>
+
     <div class="card mb-4">
         <div class="card-header pb-0">
             <style>
@@ -19,17 +30,11 @@
                 .middle-btn{
                     margin:0 .5em 0 1em;
                 }
-                .first-btn{
-                    margin-top:.3em;
-                }
             </style>
 
             <div class="container">
                 <h6>WORKSHOPS : {{workshop_count}} registered for this product</h6>
                 <div class="container-btn">
-                    <div class="first-btn">
-                        <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'product' division_id program_id %}">BACK</a>
-                    </div>
                     <div class="middle-btn">
                         <a class="btn bg-gradient-dark  mb-0" href="{% url 'create-workshop' division_id program_id product_id %}" style="float: left;"><i class=" fas fa-plus " aria-hidden="true"  ></i>&nbsp;&nbsp;Create workshop</a>
                     </div>
@@ -62,18 +67,17 @@
                             <span class="text-secondary text-xs font-weight-bold">{{workshop.description}}</span>
                         </td>
                         <td class="align-middle text-center">
-                            <a href="{% url 'update-workshop' division_id program_id product_id workshop.id %}">Edit</a>
-                            <a href="{% url 'delete-workshop' division_id program_id product_id workshop.id %}">Delete</a>
+                            <a href="{% url 'update-workshop' division_id program_id product_id workshop.id %}"><i class="fa-solid fa-pen-to-square" style="color:blue"></i></a>
+                            |
+                            <a href="{% url 'delete-workshop' division_id program_id product_id workshop.id %}"><i class="fa-solid fa-trash-can" style="color:#E64848"></i></a>
                         </td>
-
+                        
                     {% empty %}
                         <td class="align-middle text-center">
                             <span class="text-secondary text-xs font-weight-bold">No data</span>
                         </td>
                     </tr>    
-                    {% endfor %}
-                    
-                
+                    {% endfor %}                
             </tbody>
             </table>
         </div>

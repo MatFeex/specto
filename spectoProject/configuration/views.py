@@ -39,7 +39,7 @@ def create_division(request):
             form.save()
             return redirect('division')
         else : messages.error(request, 'An error occurred while adding a division')
-    context = {'form':form, 'text':'DIVISION'}
+    context = {'form':form, 'text':'CREATE A NEW DIVISION'}
     return render(request, 'configuration/form.html', context)
 
 
@@ -52,7 +52,7 @@ def update_division(request,division_id):
             form.save()
             return redirect('division')
         else : messages.error(request, 'An error occurred while updating the division')
-    context = {'form':form}
+    context = {'form':form,'text':'UPDATE THE DIVISION'}
     return render(request, 'configuration/form.html', context)
 
 
@@ -102,7 +102,7 @@ def create_program(request, division_id):
             f.save()
             return redirect(f'/configuration/division/{division_id}/program/')
         else : messages.error(request, 'An error occurred while adding the program')
-    context = {'form':form, 'text':'PROGRAM'}
+    context = {'form':form, 'text':'CREATE A NEW PROGRAM'}
     return render(request, 'configuration/form.html', context)
 
 
@@ -118,7 +118,7 @@ def update_program(request,division_id, program_id):
             f.save()
             return redirect(f'/configuration/division/{division_id}/program/')
         else : messages.error(request, 'An error occurred while updating the program')
-    context = {'form':form}
+    context = {'form':form, 'text':'UPDATE THE PROGRAM'}
     return render(request, 'configuration/form.html', context)
 
 
@@ -168,7 +168,7 @@ def create_product(request, division_id, program_id):
             f.save()
             return redirect(f'/configuration/division/{division_id}/program/{program_id}/product/')
         else : messages.error(request, 'An error occurred while adding the product')
-    context = {'form':form, 'text':'PRODUCT'}
+    context = {'form':form, 'text':'CREATE A NEW PRODUCT'}
     return render(request, 'configuration/form.html', context)
 
 
@@ -185,7 +185,7 @@ def update_product(request,division_id, program_id, product_id):
             f.save()
             return redirect(f'/configuration/division/{division_id}/program/{program_id}/product/')
         else : messages.error(request, 'An error occurred while updating the product')
-    context = {'form':form}
+    context = {'form':form,'text':'UPDATE THE PRODUCT'}
     return render(request, 'configuration/form.html', context)
 
 
@@ -235,7 +235,7 @@ def create_workshop(request, division_id, program_id, product_id):
             f.save()
             return redirect(f'/configuration/division/{division_id}/program/{program_id}/product/{product_id}/workshop/')
         else : messages.error(request, 'An error occurred while adding the workshop')
-    context = {'form':form, 'text':'WORKSHOP'}
+    context = {'form':form, 'text':'CREATE A NEW WORKSHOP'}
     return render(request, 'configuration/form.html', context)
 
 
@@ -252,7 +252,7 @@ def update_workshop(request,division_id, program_id, product_id, workshop_id):
             f.save()
             return redirect(f'/configuration/division/{division_id}/program/{program_id}/product/{product_id}/workshop/')
         else : messages.error(request, 'An error occurred while updating the workshop')
-    context = {'form':form}
+    context = {'form':form, 'text':'UPDATE THE WORKSHOP'}
     return render(request, 'configuration/form.html', context)
 
 
@@ -318,15 +318,18 @@ def upload_employee(request):
                 df_workshop = pd.DataFrame(list(workshops))
                 
                 # df to dict
-                dict_programs = dict(zip(df_programs.name,df_programs.id))
-                dict_products = dict(zip(df_products.name,df_products.id))
-                dict_workshop = dict(zip(df_workshop.name,df_workshop.id))
+                dict_programs, dict_products, dict_workshop = [],[],[]
+                try :
+                    dict_programs = dict(zip(df_programs.name,df_programs.id))
+                    dict_products = dict(zip(df_products.name,df_products.id))
+                    dict_workshop = dict(zip(df_workshop.name,df_workshop.id))
+                except : messages.error(request, 'Default values will be given for missing information about programs, products and workshops')
 
                 # mapping
-                program_id = data['Affaire'].map(dict_programs).values[0]
-                product_id = data['Produit'].map(dict_products).values[0]
-                workshop_id = data['Phase'].map(dict_workshop).values[0]
-            
+                program_id = data['Affaire'].map(dict_programs).values[0] if dict_programs else 'nan'
+                product_id = data['Produit'].map(dict_products).values[0] if dict_products else 'nan'
+                workshop_id = data['Phase'].map(dict_workshop).values[0] if dict_workshop else 'nan'
+
                 # give default ID if cannot map
                 program_id = int(str(program_id).replace('nan','1'))
                 product_id = int(str(product_id).replace('nan','1'))
@@ -375,8 +378,10 @@ def upload_employee(request):
                             'workshop_id',
                         ]
                     )
-                conn.commit()
-                return redirect('employee')
+                try :
+                    conn.commit()
+                    return redirect('employee')
+                except : messages.error(request, 'An error occured : please register at least a divison, a program, a product and a workshop before uploading employees')
 
             else : messages.error(request, 'The path file is unreachable')
 

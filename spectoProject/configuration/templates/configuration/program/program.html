@@ -3,6 +3,15 @@
 {% block content %}
 
 <div class="col-12">
+    <style>
+        .first-btn{
+            margin-left: 1em;
+            margin-bottom: 1em;
+        }
+    </style>
+    <div class="first-btn">
+        <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'division' %}">BACK</a>
+    </div>    
     <div class="card mb-4">
         <div class="card-header pb-0">
             <style>
@@ -19,17 +28,11 @@
                 .middle-btn{
                     margin:0 .5em 0 1em;
                 }
-                .first-btn{
-                    margin-top:.3em;
-                }
             </style>
 
             <div class="container">
                 <h6>PROGRAMS : {{program_count}} registered for this division</h6>
                 <div class="container-btn">
-                    <div class="first-btn">
-                        <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'division' %}">BACK</a>
-                    </div>
                     <div class="middle-btn">
                         <a class="btn bg-gradient-dark  mb-0" href="{% url 'create-program' division_id %}" style="float: left;"><i class=" fas fa-plus " aria-hidden="true"  ></i>&nbsp;&nbsp;Create program</a>
                     </div>
@@ -65,11 +68,12 @@
                             <span class="text-secondary text-xs font-weight-bold">{{program.description}}</span>
                         </td>
                         <td class="align-middle text-center">
-                            <a href="{% url 'update-program' division_id program.id %}">Edit</a>
-                            <a href="{% url 'delete-program' division_id program.id %}">Delete</a>
+                            <a href="{% url 'update-program' division_id program.id %}"><i class="fa-solid fa-pen-to-square" style="color:blue"></i></a>
+                            |
+                            <a href="{% url 'delete-program' division_id program.id %}"><i class="fa-solid fa-trash-can" style="color:#E64848"></i></a>
                         </td>
                         <td class="align-middle text-center">
-                            <span class="text-secondary text-xs font-weight-bold"><a href="{% url 'product' division_id program.id %}">Products</a></span>
+                            <a class="btn btn-outline-secondary btn-sm" style="margin: 0;" href="{% url 'product' division_id program.id %}" role="button">Products</a>
                         </td>
 
                     {% empty %}

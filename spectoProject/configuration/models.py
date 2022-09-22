@@ -14,6 +14,7 @@ class BaseModel(models.Model):
     updated_by = models.CharField(max_length=50, default="Default User")
 
     class Meta :
+        ordering = ['-updated_at','-created_at']
         abstract = True
 
 

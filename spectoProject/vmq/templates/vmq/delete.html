@@ -2,11 +2,41 @@
 
 {% block content %}
 
-<form action="" method="POST">
-    {% csrf_token %}
-    <p>Are you sure you want to delete "{{obj}}"?</p>
-    <a href="{{request.META.HTTP_REFERER">Cancel</a>
-    <input type="Submit" value = "Confirm">
-</form>
+
+<div class="col-12">
+    <div class="card mb-4">
+        <div class ="card-body px-0 pt-0 pb-2">
+            
+            <style>
+                .delete-container{
+                    display: flex;
+                    margin: 1em;
+                }
+                .delete-container h6 {
+                    margin-top: .5em;
+                }
+                .delete-container div {
+                    margin-left: 2em;
+                }
+                .delete-container .buttons {
+                    margin-top: .3em;
+                }
+            </style>
+
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div class="delete-container">
+                    <h6>Are you sure you want to delete "{{obj}}"?</h6>
+                    <div class="buttons">
+                        <a class="btn btn-outline-primary btn-sm mb-0 me-3" onclick="history.back()">Cancel</a>
+                        <input type="Submit" value = "Confirm" class="btn btn-outline-primary btn-sm mb-0 me-3">
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
 
 {% endblock content%}

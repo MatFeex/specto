@@ -2,22 +2,105 @@
 
 {% block content %}
 
-<div>
-    <h5>{{vmq_count}} VMQs registered </h5>
-    <a href="{% url 'create-vmq' %}">Create A VMQ</a>
-    <a href="{% url 'deleted-vmq' %}">Restore A VMQ</a>
+<div class="col-12">
+    <style>
+        .first-btn{
+            margin-left: 1em;
+            margin-bottom: 1em;
+        }
+    </style>
+    <div class="first-btn" style="display: flex;">
+        <a style="margin-left: 1em;" class="btn bg-gradient-dark  mb-0" href="{% url 'theme' %}" style="float: left;"><i class="fa-sharp fa-solid fa-thumbtack"></i>&nbsp;&nbsp;Themes</a>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header pb-0">
+            <style>
+                .container{
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .container h6{
+                    margin-top: .5em;
+                }
+                .container-btn{
+                    display: flex;
+                }
+                .middle-btn{
+                    margin:0 .5em 0 1em;
+                }
+            </style>
 
-    {% for vmq in vmqs %}
-        <div>
-            <a href="{% url 'update-vmq' vmq.id %}">Edit</a>
-            <a href="{% url 'delete-vmq' vmq.id %}">Delete</a>
-
-            <h5> - <a href="">{{vmq.reference}}</a> -- Workshop : {{vmq.workshop}}</h5>
-            <h5>Comment : {{vmq.comment}}</h5>
+            <div class="container">
+                <h6>VMQs : {{vmq_count}} registered for this theme</h6>
+                <div class="container-btn">
+                    <div class="middle-btn">
+                        <a class="btn bg-gradient-dark  mb-0" href="{% url 'create-vmq' %}" style="float: left;"><i class=" fas fa-plus " aria-hidden="true"  ></i>&nbsp;&nbsp;Create VMQ</a>
+                    </div>
+                    <a class="btn bg-gradient-dark  mb-0" href="{% url 'deleted-vmq' %}" style="float: left;"><i class=" fas fa-undo " aria-hidden="true"  ></i>&nbsp;&nbsp;Restore VMQ</a>
+                </div>
+            </div>
             <hr>
         </div>
-    {% endfor %}
+        <div class="card-body px-0 pt-0 pb-2">
+            <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                    <thead>
+                    <tr>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">VMQ Ref</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Visit Date</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Visitor</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Visited</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Workshop</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Mentioned Items</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Details</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                            {% for vmq in vmqs %}
+                            <tr>
+                                <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">{{vmq.reference}}</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">{{vmq.visit_date}}</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">{{vmq.user}}</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">{{vmq.employee}}</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">{{vmq.workshop}}</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">{{vmq.items.count}}</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <a href="{% url 'update-vmq' vmq.id %}"><i class="fa-solid fa-pen-to-square" style="color:blue"></i></a>
+                                    |
+                                    <a href="{% url 'delete-vmq' vmq.id %}"><i class="fa-solid fa-trash-can" style="color:#E64848"></i></a>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <a class="btn btn-outline-secondary btn-sm" style="margin: 0;" href="{% url 'vmq-details' vmq.id %}" role="button">VMQ</a>
+                                </td>
+        
+                            {% empty %}
+                                <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">No data</span>
+                                </td>
+                            </tr>    
+                            {% endfor %}
+                            
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
-
 {% endblock content%}
+
+

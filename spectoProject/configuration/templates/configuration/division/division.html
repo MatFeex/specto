@@ -53,11 +53,12 @@
                             <span class="text-secondary text-xs font-weight-bold">{{division.description}}</span>
                         </td>
                         <td class="align-middle text-center">
-                            <a href="{% url 'update-division' division.id %}">Edit</a>
-                            <a href="{% url 'delete-division' division.id %}">Delete</a>
+                            <a href="{% url 'update-division' division.id %}"><i class="fa-solid fa-pen-to-square" style="color:blue"></i></a>
+                            |
+                            <a href="{% url 'delete-division' division.id %}"><i class="fa-solid fa-trash-can" style="color:#E64848"></i></a>
                         </td>
                         <td class="align-middle text-center">
-                            <span class="text-secondary text-xs font-weight-bold"><a href="{% url 'program' division.id %}">Programs</a></span>
+                            <a class="btn btn-outline-secondary btn-sm" style="margin: 0;" href="{% url 'program' division.id %}" role="button">Programs</a>
                         </td>
 
                     {% empty %}

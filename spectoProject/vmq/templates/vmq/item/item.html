@@ -2,22 +2,73 @@
 
 {% block content %}
 
-<div>
-    <h5>{{item_count}} items registered for this theme</h5>
-    <a href="{% url 'create-item' theme_id %}">Create An Item</a>
-    <a href="{% url 'deleted-item' theme_id %}">Restore An Item</a>
-
-    {% for item in items %}
-        <div>
-            <a href="{% url 'update-item' theme_id item.id %}">Edit</a>
-            <a href="{% url 'delete-item' theme_id item.id %}">Delete</a>
-
-            <h5> - <a href="">{{item.name}}</a> -- Theme : {{item.theme}}</h5>
-            <h5>Description : {{item.description}}</h5>
+<div class="col-12">
+    <div class="first-btn" style="margin-bottom: 1em; margin-left: 1em;">
+        <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'theme' %}">BACK</a>
+    </div>
+    <div class="card mb-4">
+        <div class="card-header pb-0">
+            <style>
+                .container{
+                    display: flex;
+                    justify-content: space-between;
+                }
+            </style>
+            <div class="container">
+                <h6 style="margin-top: .5em;">ITEMS : {{item_count}} registered for this theme</h6>
+                <div>
+                    <a class="btn bg-gradient-dark  mb-0" href="{% url 'create-item' theme_id %}" style="float: left;"><i class=" fas fa-plus " aria-hidden="true"  ></i>&nbsp;&nbsp;Create Item</a>
+                    <a class="btn bg-gradient-dark  mb-0" href="{% url 'deleted-item' theme_id %}" style="float: left; margin-left: 1em;"><i class=" fas fa-undo " aria-hidden="true"  ></i>&nbsp;&nbsp;Restore Item</a>
+                </div>
+            </div>
             <hr>
         </div>
-    {% endfor %}
+        <div class="card-body px-0 pt-0 pb-2">
+        <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+            <thead>
+            <tr>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Theme</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Description</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{item.theme}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{item.name}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{item.description}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <a href="{% url 'update-item' theme_id item.id %}"><i class="fa-solid fa-pen-to-square" style="color:blue"></i></a>
+                            |
+                            <a href="{% url 'delete-item' theme_id item.id %}"><i class="fa-solid fa-trash-can" style="color:#E64848"></i></a>
+                        </td>
+
+                    {% empty %}
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">No data</span>
+                        </td>
+                    </tr>    
+                    {% endfor %}
+            </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
 </div>
 
-
 {% endblock content%}
+
+
+
+
+
+
