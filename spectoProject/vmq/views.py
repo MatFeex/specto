@@ -54,8 +54,10 @@ def update_theme(request,theme_id):
 
 def delete_theme(request,theme_id):
     theme = Theme.objects.get(id=theme_id)
+    items = Item.objects.filter(theme_id=theme_id)
     if request.method == 'POST' :
         theme.soft_deleted()
+        for item in items : item.soft_deleted()
         return redirect('theme')
     context = {'obj':theme}
     return render(request,'vmq/delete.html',context)
@@ -63,10 +65,11 @@ def delete_theme(request,theme_id):
 
 def restore_theme(request,theme_id):
     theme = Theme.deleted_objects.get(id=theme_id)
+    items = Item.deleted_objects.filter(theme_id=theme_id)
     if request.method == 'POST' :
         theme.restore()
+        for item in items : item.restore()
         return redirect('theme')
-
     context = {'obj':theme}
     return render(request,'vmq/restore.html',context)
 
@@ -216,7 +219,7 @@ def update_vmq(request,vmq_id):
             # SAVE PARENT
             vmq_form.save()
 
-            # Delete previous CHILDS
+            # Delete previous m2m CHILDS
             VmqItem.objects.filter(vmq_id=vmq_id).delete()
 
             # NEW CHILDS - VMQ_Item - ManyToMany  

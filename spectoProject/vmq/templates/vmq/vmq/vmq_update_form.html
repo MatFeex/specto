@@ -22,6 +22,13 @@
                         margin-left: .5em;
                         width: 100%;
                     }
+                    .input-form{
+                        border: 1px solid #bcb9b9;
+                        padding: .5rem;
+                        border-radius: 10px;
+                        width: 95%;
+                        margin-bottom: .5em;
+                    }
                 </style>
 
                 <div class="form-row">
@@ -47,7 +54,7 @@
                   <div class="form-row">
                     <div class="form-group">
                         <div class="table-responsive p-0">
-                            <table>
+                            <table style="width: 95%;" class="table bordered">
                                 <thead>
                                 <tr>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Theme</th>
@@ -61,14 +68,14 @@
                                         {% for item,vmq_item in zip_items %}
                                         <tr>
                                             <td>
-                                                <center><span class="text-secondary text-xs font-weight-bold">{{item.theme}}</span></center>
+                                                <h6 style="width: 15em;"><span class="text-secondary text-xs font-weight-bold">{{item.theme}}</span></h6>
                                             </td>
                                             <td>
-                                                <center><span class="text-secondary text-xs font-weight-bold">{{item.name}}</span></center>
+                                                <h6 style="width: 20em;"><span class="text-secondary text-xs font-weight-bold">{{item.name}}</span></h6>
                                             </td>
                                             <td>
                                                 <input type="hidden" name="item-id" value="{{item.id}}">
-                                                <input type="text" required name="result" list="result-list" value="{{vmq_item.result}}"/>
+                                                <center><input class="input-form" type="text" required name="result" list="result-list" value="{{vmq_item.result}}"/></center>
                                                 <datalist id="result-list">
                                                     <select>
                                                     <option>Conforme</option>
@@ -77,7 +84,7 @@
                                                 </datalist>
                                             </td>
                                             <td>
-                                                <input type="text" required name="type" list="type-list" value="{{vmq_item.type}}"/>
+                                                <center><input class="input-form" type="text" required name="type" list="type-list" value="{{vmq_item.type}}"/></center>
                                                 <datalist id="type-list">
                                                     <select>
                                                     <option>Application</option>
@@ -86,7 +93,7 @@
                                                 </datalist>
                                             </td>
                                             <td>
-                                                <input type="text" required name="comment" value="{{vmq_item.comment}}"/>
+                                                <center><input class="input-form" type="text" required name="comment" value="{{vmq_item.comment}}"/></center>
                                             </td>
                     
                                         {% empty %}

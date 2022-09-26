@@ -22,9 +22,9 @@
                     }
                     .form-group h5{
                         background: transparent;
-                        border: 1px solid #40abed;
+                        border: 1px solid #bcb9b9;
                         padding: .5rem;
-                        border-radius: 3px;
+                        border-radius: 10px;
                         width: 100%;
                         font-weight: 500;
                         outline: none;
@@ -36,7 +36,6 @@
                         margin-left: .2em;
                     }
                 </style>
-
                 <div class="form-row">
                     <div class="form-group">
                         <h6>Visitor :</h6>
@@ -71,7 +70,7 @@
                             }
                         </style>
                         <div class="table-responsive p-0">
-                            <table style="width: 95%;">
+                            <table style="width: 95%;" class="table bordered">
                                 <thead>
                                 <tr>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Theme</th>
@@ -85,10 +84,10 @@
                                         {% for item,vmq_item in zip_items %}
                                         <tr>
                                             <td>
-                                                <center><span class="text-secondary text-xs font-weight-bold">{{item.theme}}</span></center>
+                                                <h6 style="width: 15em;"><span class="text-secondary text-xs font-weight-bold">{{item.theme}}</span></h6>
                                             </td>
                                             <td>
-                                                <center><span class="text-secondary text-xs font-weight-bold">{{item.name}}</span></center>
+                                                <h6 style="width: 20em;"><span class="text-secondary text-xs font-weight-bold">{{item.name}}</span></h6>
                                             </td>
                                             <td>
                                                 <div class="form-group">
@@ -117,8 +116,6 @@
                         </div>
                     </div>
                   </div>
-                  
-                <br>
                 <center><div>
                     <a class ="btn btn-outline-primary btn-sm mb-0 me-3" onclick="history.back()">BACK</a>
                 </div></center>
