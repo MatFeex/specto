@@ -1,15 +1,10 @@
 from django.shortcuts import render, redirect
-
-from configuration.models import Workshop
 from .models import Theme, Item, Vmq, VmqItem
-from .forms import ThemeForm, ItemForm, VmqForm, VmqItemForm
+from .forms import ThemeForm, ItemForm, VmqForm
 from django.contrib import messages
 
 
 # SPECTO VIEWS : VMQ
-
-def read_vmq_choice(request):
-    return render(request,'vmq/vmq_choice.html')
 
 # CRUD-R for THEME
 

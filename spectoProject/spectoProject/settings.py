@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     # SPECTO - APPS
     'configuration.apps.ConfigurationConfig',
     'vmq.apps.VmqConfig',
+    'gemba.apps.GembaConfig',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

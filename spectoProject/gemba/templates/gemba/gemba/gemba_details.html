@@ -1,0 +1,107 @@
+{% extends 'main.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="col-lg-6 mb-lg-0 mb-4 offset-2"  style="width: 90%; margin: auto;"> 
+    <div class="card z-index-2 ">
+        <div class="card-header pb-0">
+        <h6>GEMBA WALK - DETAILS</h6>
+        <hr>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+                <style>
+                    .form-row{
+                        display: flex;
+                        margin: 1.5em;
+                    }
+                    .form-group{
+                        margin-left: .5em;
+                        width: 100%;
+                    }
+                    .form-group h5{
+                        background: transparent;
+                        border: 1px solid #bcb9b9;
+                        padding: .5rem;
+                        border-radius: 10px;
+                        width: 100%;
+                        font-weight: 500;
+                        outline: none;
+                        margin-bottom: 1em;
+                        font-size: 1em;
+                    }
+                    .form-group h6{
+                        font-size: .8em;
+                        margin-left: .2em;
+                    }
+                </style>
+                <div class="form-row">
+                    <div class="form-group">
+                        <h6>Auditor :</h6>
+                        <h5>{{gemba.user}}</h5>
+                    </div>
+                    <div class="form-group">
+                        <h6>Gemba Date :</h6>
+                        <h5>{{gemba.gemba_date}}</h5>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                        <style>
+                            .table-responsive h5{
+                                width: 95%;
+                                padding: .3em;
+                            }
+                        </style>
+                        <div class="table-responsive p-0">
+                            <table style="width: 95%;" class="table bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gemba Service</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gemba Item</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Answers</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Problems</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        {% for gemba_item,gemba_gemba_item in zip_gemba_items %}
+                                        <tr>
+                                            <td>
+                                                <h6 style="width: 15em;"><span class="text-secondary text-xs font-weight-bold">{{gemba_item.gemba_service}}</span></h6>
+                                            </td>
+                                            <td>
+                                                <h6 style="width: 20em;"><span class="text-secondary text-xs font-weight-bold">{{gemba_item.name}}</span></h6>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <h5>{{gemba_gemba_item.answer}}</h5>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <h5>{{gemba_gemba_item.problem}}</h5>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <h5>{{gemba_gemba_item.action}}</h5>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}                               
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                  </div>
+                <center><div>
+                    <a class ="btn btn-outline-primary btn-sm mb-0 me-3" onclick="history.back()">BACK</a>
+                </div></center>
+        </div>
+    </div>
+</div>
+
+{% endblock content%}

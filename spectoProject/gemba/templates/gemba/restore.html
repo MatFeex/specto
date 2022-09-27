@@ -1,0 +1,34 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+
+
+<div class="col-12">
+    <div class="card mb-4">
+        <div class ="card-body px-0 pt-0 pb-2">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <style>
+                    .form-container{
+                        display: flex;
+                        margin: 1em;
+                    }
+                    .form-container h6 {
+                        margin-top: .5em;
+                    }
+                    .form-container input {
+                        margin-left: 3em;
+                    }
+                </style>
+                <div class="form-container">
+                    <h6>"{{obj}}" has been restored</h6>
+                    <input  type="Submit" value="OK" class="btn btn-outline-primary btn-sm mb-0 me-3" > 
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content%}

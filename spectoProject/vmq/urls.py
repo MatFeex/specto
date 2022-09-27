@@ -21,7 +21,6 @@ urlpatterns = [
     path('vmq/theme/<theme_id>/item/<item_id>/restore-item/',views.restore_item, name="restore-item"),
     
     # urls for VMQ
-    path('vmq/vmq-choice/',views.read_vmq_choice, name="vmq-choice"),
     path('vmq/deleted-vmq/',views.read_deleted_vmq, name="deleted-vmq"),
     path('vmq/',views.read_vmq, name="vmq"),
     path('vmq/create-vmq/',views.create_vmq, name="create-vmq"),

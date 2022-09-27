@@ -1,0 +1,65 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="col-12">
+    <div class="card mb-4">
+        <div class="card-header pb-0">
+            <style>
+                .container{
+                    display: flex;
+                    justify-content: space-between;
+                }
+            </style>
+            <div class="container">
+                <h6 style="margin-top: .5em;">GEMBA WALK - Services : {{services.count}} registered</h6>
+                <div>
+                    <a class="btn bg-gradient-dark  mb-0" href="{% url 'create-gemba-service' %}" style="float: left;"><i class=" fas fa-plus " aria-hidden="true"  ></i>&nbsp;&nbsp;Create Service</a>
+                    <a class="btn bg-gradient-dark  mb-0" href="{% url 'deleted-gemba-service' %}" style="float: left; margin-left: 1em;"><i class=" fas fa-undo " aria-hidden="true"  ></i>&nbsp;&nbsp;Restore Service</a>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+        <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+            <thead>
+            <tr>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Description</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gemba Items</th>
+            </tr>
+            </thead>
+            <tbody>
+                    {% for service in services %}
+                    <tr>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{service.name}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{service.description}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <a href="{% url 'update-gemba-service' service.id %}"><i class="fa-solid fa-pen-to-square" style="color:blue"></i></a>
+                            |
+                            <a href="{% url 'delete-gemba-service' service.id %}"><i class="fa-solid fa-trash-can" style="color:#E64848"></i></a>
+                        </td>
+                        <td class="align-middle text-center">
+                            <a class="btn btn-outline-secondary btn-sm" style="margin: 0;" href="{% url 'gemba-item' service.id %}" role="button">Gemba Items</a>
+                        </td>
+
+                    {% empty %}
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">No data</span>
+                        </td>
+                    </tr>    
+                    {% endfor %}
+            </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content%}

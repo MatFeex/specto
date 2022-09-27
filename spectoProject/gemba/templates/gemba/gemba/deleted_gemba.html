@@ -1,0 +1,75 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="col-12">
+    <div class="card mb-4">
+        <div class="card-header pb-0">
+            <style>
+                .container{
+                    display: flex;
+                    justify-content: space-between;
+                }
+                .container h6{
+                    margin-top: .5em;
+                }
+                .container-btn{
+                    display: flex;
+                }
+                .middle-btn{
+                    margin:0 .5em 0 1em;
+                }
+            </style>
+
+            <div class="container">
+                <h6>GEMBA WALK : {{gembas.count}} deleted</h6>
+                <a style="padding-top: .9em;" class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'gemba' %}">Cancel</a>
+            </div>
+            <hr>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+            <div class="table-responsive p-0">
+                <table class="table align-items-center mb-0">
+                    <thead>
+                    <tr>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Auditor</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Gemba Date</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Mentionned Items</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                            {% for gemba in gembas %}
+                            <tr>
+                                <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">{{gemba.id}}</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">{{gemba.user}}</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">{{gemba.gemba_date}}</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">{{gemba.gemba_items.count}}</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <a style="color: green;" href="{% url 'restore-gemba' gemba.id %}"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;&nbsp;Restore</a>
+                                </td>
+                            {% empty %}
+                                <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">No data</span>
+                                </td>
+                            </tr>    
+                            {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content%}
+
+

@@ -1,0 +1,102 @@
+{% extends 'main.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="col-lg-6 mb-lg-0 mb-4 offset-2"  style="width: 90%; margin: auto;"> 
+    <div class="card z-index-2 ">
+        <div class="card-header pb-0">
+            <h6>CREATE A NEW GEMBA WALK</h6>
+            <hr>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+            <form action="" method="POST">  
+                {% csrf_token %}
+                <style>
+                    .form-row{
+                        display: flex;
+                        margin: 1.5em;
+                    }
+                    .form-group{
+                        margin-left: .5em;
+                        width: 100%;
+                    }
+                    .input-form{
+                        border: 1px solid #bcb9b9;
+                        padding: .5rem;
+                        border-radius: 10px;
+                        width: 95%;
+                        margin-bottom: .5em;
+                    }
+                </style>
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ gemba_form.user|as_crispy_field }}
+                    </div>
+                    <div class="form-group">
+                      {{ gemba_form.gemba_date|as_crispy_field }}
+                    </div>
+                  </div>
+                  <hr style="height: 2px; margin: 0 2em 0 2em;">
+                  <div class="form-row">
+                    <div class="form-group">
+                        <div class="table-responsive p-0">
+                            <table style="width: 95%;" class="table bordered">
+                                <thead>
+                                <tr>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gemba Service</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gemba Item</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Answers</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Problems</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                        {% for gemba_item in gemba_items %}
+                                        <tr>
+                                            <td>
+                                                <h6 style="width: 15em;"><span class="text-secondary text-xs font-weight-bold">{{gemba_item.gemba_service}}</span></h6>
+                                            </td>
+                                            <td>
+                                                <h6 style="width: 20em;"><span class="text-secondary text-xs font-weight-bold">{{gemba_item.name}}</span></h6>
+                                            </td>
+                                            <td>
+                                                <input type="hidden" name="gemba-item-id" value="{{gemba_item.id}}">
+                                                <center><input class="input-form" type="text" required name="answer" list="answer-list"/></center>
+                                                <datalist id="answer-list">
+                                                    <select>
+                                                    <option>OK</option>
+                                                    <option>KO</option>
+                                                    </select>
+                                                </datalist>
+                                            </td>
+                                            <td>
+                                                <center><input class="input-form" type="text" required name="problem"/></center>
+                                            </td>
+                                            <td>
+                                                <center><input class="input-form" type="text" required name="action"/></center>
+                                            </td>
+                                        {% empty %}
+                                            <td class="align-middle text-center">
+                                                <span class="text-secondary text-xs font-weight-bold">No data</span>
+                                            </td>
+                                        </tr>    
+                                        {% endfor %}                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                  </div>
+                  
+                <br>
+                <center><div>
+                    <a class ="btn btn-outline-primary btn-sm mb-0 me-3" onclick="history.back()">Cancel</a>
+                    <input  type="submit" value="Submit" class="btn btn-outline-primary btn-sm mb-0 me-3" >
+                </div></center>
+            </form> 
+        </div>
+    </div>
+</div>
+
+{% endblock content%}

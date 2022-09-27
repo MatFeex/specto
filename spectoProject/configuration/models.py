@@ -1,5 +1,3 @@
-from __future__ import division
-from distutils.command.upload import upload
 from django.utils import timezone
 from msilib.schema import Error
 from django.db import models

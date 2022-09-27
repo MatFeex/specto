@@ -5,4 +5,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('configuration.urls')),
     path('',include('vmq.urls')),
+    path('',include('gemba.urls')),
 ]
