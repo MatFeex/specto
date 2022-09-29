@@ -37,13 +37,13 @@ class Gemba(BaseModel, SoftDeleteModel):
 class GembaItemItem(models.Model):
     answers = [
         ('OK', 'OK'),
-        ('KO', 'KO')
+        ('NK', 'NK')
     ]
     gemba_item = models.ForeignKey(GembaItem, on_delete=models.CASCADE)
     gemba = models.ForeignKey(Gemba, on_delete=models.CASCADE)
     answer = models.CharField(max_length=30,choices=answers)
-    problem = models.TextField()
-    action = models.TextField()
+    problem = models.TextField(blank=True, null=True)
+    action = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.action
