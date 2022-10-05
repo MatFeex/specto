@@ -10,25 +10,10 @@
                     display: flex;
                     justify-content: space-between;
                 }
-                .container h6{
-                    margin-top: .5em;
-                }
-                .container-btn{
-                    display: flex;
-                }
-                .middle-btn{
-                    margin:0 .5em 0 1em;
-                }
             </style>
 
             <div class="container">
                 <h6>GEMBA WALK : {{gembas.count}} registered</h6>
-                <div class="container-btn">
-                    <div class="middle-btn">
-                        <a class="btn bg-gradient-dark  mb-0" href="{% url 'create-gemba' %}" style="float: left;"><i class=" fas fa-plus " aria-hidden="true"  ></i>&nbsp;&nbsp;Create GEMBA</a>
-                    </div>
-                    <a class="btn bg-gradient-dark  mb-0" href="{% url 'deleted-gemba' %}" style="float: left;"><i class=" fas fa-undo " aria-hidden="true"  ></i>&nbsp;&nbsp;Restore GEMBA</a>
-                </div>
             </div>
             <hr>
         </div>

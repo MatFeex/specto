@@ -10,25 +10,10 @@
                     display: flex;
                     justify-content: space-between;
                 }
-                .container h6{
-                    margin-top: .5em;
-                }
-                .container-btn{
-                    display: flex;
-                }
-                .middle-btn{
-                    margin:0 .5em 0 1em;
-                }
             </style>
 
             <div class="container">
                 <h6>VMQs : {{vmq_count}} registered</h6>
-                <div class="container-btn">
-                    <div class="middle-btn">
-                        <a class="btn bg-gradient-dark  mb-0" href="{% url 'create-vmq' %}" style="float: left;"><i class=" fas fa-plus " aria-hidden="true"  ></i>&nbsp;&nbsp;Create VMQ</a>
-                    </div>
-                    <a class="btn bg-gradient-dark  mb-0" href="{% url 'deleted-vmq' %}" style="float: left;"><i class=" fas fa-undo " aria-hidden="true"  ></i>&nbsp;&nbsp;Restore VMQ</a>
-                </div>
             </div>
             <hr>
         </div>

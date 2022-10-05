@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import Theme, Item, Vmq, VmqItem
 from .forms import ThemeForm, ItemForm, VmqForm
 from django.contrib import messages
-
+from django.db.models import Q
 
 # SPECTO VIEWS : VMQ
 
@@ -150,6 +150,10 @@ def read_specific_vmq(request,vmq_id):
     context = {'vmq':vmq,'zip_items':zip_items}
     return render(request,'vmq/vmq/vmq_details.html',context)
 
+def read_vmq_actions(request):
+    vmq_items = VmqItem.objects.filter(~Q(action='') & ~Q(action=None))
+    context = {'vmq_items':vmq_items}
+    return render(request,'vmq/vmq/vmq_actions.html',context)
 
 def read_deleted_vmq(request):
     vmqs = Vmq.deleted_objects.all()
@@ -167,6 +171,7 @@ def create_vmq(request):
         results = request.POST.getlist('result')
         types = request.POST.getlist('type')
         comments = request.POST.getlist('comment')
+        actions = request.POST.getlist('action')
         
         # VMQ FORM
         vmq_form = VmqForm(request.POST)
@@ -183,6 +188,7 @@ def create_vmq(request):
                                         result = results[i],
                                         type = types[i],
                                         comment = comments[i],
+                                        action = actions[i],
                                         )
             return redirect('vmq')
 
@@ -205,6 +211,8 @@ def update_vmq(request,vmq_id):
         results = request.POST.getlist('result')
         types = request.POST.getlist('type')
         comments = request.POST.getlist('comment')
+        actions = request.POST.getlist('action')
+
         
         # VMQ FORM
         vmq_form = VmqForm(request.POST, instance = vmq)
@@ -224,6 +232,7 @@ def update_vmq(request,vmq_id):
                                         result = results[i],
                                         type = types[i],
                                         comment = comments[i],
+                                        action = actions[i],
                                         )
             return redirect('vmq')
 

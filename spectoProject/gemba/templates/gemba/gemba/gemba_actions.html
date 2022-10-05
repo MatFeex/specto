@@ -7,7 +7,7 @@
 <div class="col-lg-6 mb-lg-0 mb-4 offset-2"  style="width: 90%; margin: auto;"> 
     <div class="card z-index-2 ">
         <div class="card-header pb-0">
-        <h6>GEMBA WALK - DETAILS</h6>
+        <h6>GEMBA WALK - ACTIONS LIST</h6>
         <hr>
         </div>
         <div class="card-body px-0 pt-0 pb-2">
@@ -36,16 +36,6 @@
                         margin-left: .2em;
                     }
                 </style>
-                <div class="form-row">
-                    <div class="form-group">
-                        <h6>Auditor :</h6>
-                        <h5>{{gemba.user}}</h5>
-                    </div>
-                    <div class="form-group">
-                        <h6>Gemba Date :</h6>
-                        <h5>{{gemba.gemba_date}}</h5>
-                    </div>
-                  </div>
 
                   <div class="form-row">
                     <div class="form-group">
@@ -59,35 +49,27 @@
                             <table style="width: 95%;" class="table bordered">
                                 <thead>
                                     <tr>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gemba ID</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gemba Service</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Gemba Item</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Answers</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Problems</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                        {% for gemba_item,gemba_gemba_item in zip_gemba_items %}
+                                        {% for gemba_gemba_item in gemba_gemba_items %}
                                         <tr>
                                             <td>
-                                                <h6 style="width: 15em;"><span class="text-secondary text-xs font-weight-bold">{{gemba_item.gemba_service}}</span></h6>
+                                                <center><h6 style="width: 15em;"><span class="text-secondary text-xs font-weight-bold">{{gemba_gemba_item.gemba.id}}</span></h6></center>
                                             </td>
                                             <td>
-                                                <h6 style="width: 20em;"><span class="text-secondary text-xs font-weight-bold">{{gemba_item.name}}</span></h6>
+                                                <h6 style="width: 15em;"><span class="text-secondary text-xs font-weight-bold">{{gemba_gemba_item.gemba_item.gemba_service.name}}</span></h6>
                                             </td>
                                             <td>
-                                                <div class="form-group">
-                                                    <h5>{{gemba_gemba_item.answer}}</h5>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="form-group" >
-                                                    <h5 style="min-height: 2.1em">{{gemba_gemba_item.problem}}</h5>  <!--min-height to make input look good if null -->
-                                                </div>
+                                                <h6 style="width: 20em;"><span class="text-secondary text-xs font-weight-bold">{{gemba_gemba_item.gemba_item.name}}</span></h6>
                                             </td>
                                             <td>
                                                 <div class="form-group">
-                                                     <h5 style="min-height: 2.1em">{{gemba_gemba_item.action}}</h5> <!--min-height to make input look good if null -->
+                                                    <h5>{{gemba_gemba_item.action}}</h5>
                                                 </div>
                                             </td>
                                         </tr>

@@ -12,11 +12,7 @@
                 }
             </style>
             <div class="container">
-                <h6 style="margin-top: .5em;">GEMBA WALK - Services : {{services.count}} registered</h6>
-                <div>
-                    <a class="btn bg-gradient-dark  mb-0" href="{% url 'create-gemba-service' %}" style="float: left;"><i class=" fas fa-plus " aria-hidden="true"  ></i>&nbsp;&nbsp;Create Service</a>
-                    <a class="btn bg-gradient-dark  mb-0" href="{% url 'deleted-gemba-service' %}" style="float: left; margin-left: 1em;"><i class=" fas fa-undo " aria-hidden="true"  ></i>&nbsp;&nbsp;Restore Service</a>
-                </div>
+                <h6>GEMBA WALK - Services : {{services.count}} registered</h6>
             </div>
             <hr>
         </div>

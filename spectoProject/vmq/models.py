@@ -50,7 +50,8 @@ class VmqItem(models.Model):
     vmq = models.ForeignKey(Vmq, on_delete=models.CASCADE)
     result = models.CharField(max_length=30,choices=results)
     type = models.CharField(max_length=30, choices=types)
-    comment = models.TextField()
+    comment = models.TextField(blank=True, null=True)
+    action = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.comment

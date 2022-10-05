@@ -61,16 +61,17 @@
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Results</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Types</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comment</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                         {% for item in items %}
                                         <tr>
-                                            <td>
-                                                <h6 style="width: 15em;"><span class="text-secondary text-xs font-weight-bold">{{item.theme}}</span></h6>
+                                            <td style="width: 15em;">
+                                                <h6><span class="text-secondary text-xs font-weight-bold">{{item.theme}}</span></h6>
                                             </td>
-                                            <td>
-                                                <h6 style="width: 20em;"><span class="text-secondary text-xs font-weight-bold">{{item.name}}</span></h6>
+                                            <td style="width: 18em;">
+                                                <h6><span class="text-secondary text-xs font-weight-bold">{{item.name}}</span></h6>
                                             </td>
                                             <td>
                                                 <input type="hidden" name="item-id" value="{{item.id}}">
@@ -92,12 +93,15 @@
                                                 </datalist>
                                             </td>
                                             <td>
-                                                <center><input class="input-form" type="text" required name="comment"/></center>
+                                                <center><input class="input-form" type="text" name="comment"/></center>
+                                            </td>
+                                            <td>
+                                                <center><input class="input-form" type="text" name="action"/></center>
                                             </td>
                     
                                         {% empty %}
                                             <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">No data</span>
+                                                <span class="text-secondary text-xs font-weight-bold">No items have been added</span>
                                             </td>
                                         </tr>    
                                         {% endfor %}                                    

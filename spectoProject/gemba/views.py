@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from .models import GembaService, GembaItem, Gemba, GembaItemItem
 from .forms import GembaServiceForm, GembaServiceForm, GembaItemForm, GembaForm
 from django.contrib import messages
+from django.db.models import Q
+
 
 
 # SPECTO VIEWS : VMQ
@@ -145,6 +147,10 @@ def read_specific_gemba(request,gemba_id):
     context = {'gemba':gemba,'zip_gemba_items':zip_gemba_items}
     return render(request,'gemba/gemba/gemba_details.html',context)
 
+def read_gemba_actions(request):
+    gemba_gemba_items = GembaItemItem.objects.filter(~Q(action='') & ~Q(action=None))
+    context = {'gemba_gemba_items':gemba_gemba_items}
+    return render(request,'gemba/gemba/gemba_actions.html',context)
 
 def read_deleted_gemba(request):
     gembas = Gemba.deleted_objects.all()
