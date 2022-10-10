@@ -64,13 +64,10 @@
                                             </td>
                                             <td>
                                                 <input type="hidden" name="gemba-item-id" value="{{gemba_item.id}}">
-                                                <center><input class="input-form" type="text" required name="answer" list="answer-list" value="{{gemba_gemba_item.answer}}"/></center>
-                                                <datalist id="answer-list">
-                                                    <select>
-                                                    <option>OK</option>
-                                                    <option>NK</option>
-                                                    </select>
-                                                </datalist>
+                                                <center><select style="width: 8.5em;" name="answer" class="select form-select">
+                                                    <option {% if gemba_item.answer == 'OK' %}selected{% endif %}>OK</option>
+                                                    <option {% if gemba_item.answer == 'NK' %}selected{% endif %}>NK</option>
+                                                </select></center>
                                             </td>
                                             <td>
                                                 <center><input class="input-form" type="text" name="problem" value="{{gemba_gemba_item.problem}}"/></center>

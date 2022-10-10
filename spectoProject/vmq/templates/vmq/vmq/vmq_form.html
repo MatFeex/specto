@@ -75,28 +75,22 @@
                                             </td>
                                             <td>
                                                 <input type="hidden" name="item-id" value="{{item.id}}">
-                                                <center><input class="input-form" type="text" required name="result" list="result-list"/></center>
-                                                <datalist id="result-list">
-                                                    <select>
+                                                <select style="width: 10.5em;" name="result" class="select form-select">
                                                     <option>Conforme</option>
                                                     <option>Non Conforme</option>
-                                                    </select>
-                                                </datalist>
+                                                </select>
                                             </td>
                                             <td>
-                                                <center><input class="input-form" type="text" required name="type" list="type-list"/></center>
-                                                <datalist id="type-list">
-                                                    <select>
+                                                <select style="width: 8.5em;" name="type" class="select form-select">
                                                     <option>Application</option>
                                                     <option>Disposition</option>
-                                                    </select>
-                                                </datalist>
+                                                </select>
                                             </td>
                                             <td>
-                                                <center><input class="input-form" type="text" name="comment"/></center>
+                                                <center><input style="width: 9em;"class="input-form" type="text" name="comment"/></center>
                                             </td>
                                             <td>
-                                                <center><input class="input-form" type="text" name="action"/></center>
+                                                <center><input style="width: 9em;" class="input-form" type="text" name="action"/></center>
                                             </td>
                     
                                         {% empty %}

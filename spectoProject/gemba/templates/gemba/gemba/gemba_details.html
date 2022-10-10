@@ -56,6 +56,18 @@
                             }
                         </style>
                         <div class="table-responsive p-0">
+                            <style>
+                                .table-responsive h5{
+                                    width: 95%;
+                                    min-height: 2.5em;
+                                    min-width: 7em;
+                                    margin-top: .7em;
+                                    padding-top: .5em;
+                                }
+                                .table-responsive h6{
+                                    margin-top: 1.5em;
+                                }
+                            </style>
                             <table style="width: 95%;" class="table bordered">
                                 <thead>
                                     <tr>
@@ -82,12 +94,12 @@
                                             </td>
                                             <td>
                                                 <div class="form-group" >
-                                                    <h5 style="min-height: 2.1em">{{gemba_gemba_item.problem}}</h5>  <!--min-height to make input look good if null -->
+                                                    <h5>{{gemba_gemba_item.problem}}</h5>  <!--min-height to make input look good if null -->
                                                 </div>
                                             </td>
                                             <td>
                                                 <div class="form-group">
-                                                     <h5 style="min-height: 2.1em">{{gemba_gemba_item.action}}</h5> <!--min-height to make input look good if null -->
+                                                     <h5>{{gemba_gemba_item.action}}</h5> <!--min-height to make input look good if null -->
                                                 </div>
                                             </td>
                                         </tr>

@@ -72,32 +72,26 @@
                                                 <h6 style="width: 15em;"><span class="text-secondary text-xs font-weight-bold">{{item.theme}}</span></h6>
                                             </td>
                                             <td>
-                                                <h6 style="width: 20em;"><span class="text-secondary text-xs font-weight-bold">{{item.name}}</span></h6>
+                                                <h6 style="width: 15em;"><span class="text-secondary text-xs font-weight-bold">{{item.name}}</span></h6>
                                             </td>
                                             <td>
                                                 <input type="hidden" name="item-id" value="{{item.id}}">
-                                                <center><input class="input-form" type="text" required name="result" list="result-list" value="{{vmq_item.result}}"/></center>
-                                                <datalist id="result-list">
-                                                    <select>
-                                                    <option>Conforme</option>
-                                                    <option>Non Conforme</option>
-                                                    </select>
-                                                </datalist>
+                                                <select style="width: 10.5em;" name="result" class="select form-select">
+                                                    <option {% if vmq_item.result == 'Conforme' %}selected{% endif %}>Conforme</option>
+                                                    <option {% if vmq_item.result == 'Non Conforme' %}selected{% endif %}>Non Conforme</option>
+                                                </select>
                                             </td>
                                             <td>
-                                                <center><input class="input-form" type="text" required name="type" list="type-list" value="{{vmq_item.type}}"/></center>
-                                                <datalist id="type-list">
-                                                    <select>
-                                                    <option>Application</option>
-                                                    <option>Disposition</option>
-                                                    </select>
-                                                </datalist>
+                                                <select style="width: 8.5em;" name="type" class="select form-select">
+                                                    <option {% if vmq_item.type == 'Application' %}selected{% endif %}>Application</option>
+                                                    <option {% if vmq_item.type == 'Disposition' %}selected{% endif %}>Disposition</option>
+                                                </select>
                                             </td>
                                             <td>
-                                                <center><input class="input-form" type="text" required name="comment" value="{{vmq_item.comment}}"/></center>
+                                                <center><input style="width: 8.5em;"class="input-form" type="text" name="comment" value="{{vmq_item.comment}}"/></center>
                                             </td>
                                             <td>
-                                                <center><input class="input-form" type="text" required name="action" value="{{vmq_item.action}}"/></center>
+                                                <center><input style="width: 8.5em;"class="input-form" type="text" name="action" value="{{vmq_item.action}}"/></center>
                                             </td>
                     
                                         {% empty %}

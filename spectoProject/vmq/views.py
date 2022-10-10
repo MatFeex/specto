@@ -150,10 +150,12 @@ def read_specific_vmq(request,vmq_id):
     context = {'vmq':vmq,'zip_items':zip_items}
     return render(request,'vmq/vmq/vmq_details.html',context)
 
+
 def read_vmq_actions(request):
     vmq_items = VmqItem.objects.filter(~Q(action='') & ~Q(action=None))
     context = {'vmq_items':vmq_items}
     return render(request,'vmq/vmq/vmq_actions.html',context)
+
 
 def read_deleted_vmq(request):
     vmqs = Vmq.deleted_objects.all()

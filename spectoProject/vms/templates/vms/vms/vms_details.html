@@ -7,7 +7,7 @@
 <div class="col-lg-6 mb-lg-0 mb-4 offset-2"  style="width: 90%; margin: auto;"> 
     <div class="card z-index-2 ">
         <div class="card-header pb-0">
-        <h6>VMQ - DETAILS</h6>
+        <h6>VMS - DETAILS</h6>
         <hr>
         </div>
         <div class="card-body px-0 pt-0 pb-2">
@@ -39,25 +39,25 @@
                 <div class="form-row">
                     <div class="form-group">
                         <h6>Visitor :</h6>
-                        <h5>{{vmq.user}}</h5>
+                        <h5>{{vms.user}}</h5>
                     </div>
                     <div class="form-group">
                         <h6>Reference :</h6>
-                        <h5>{{vmq.reference}}</h5>
+                        <h5>{{vms.reference}}</h5>
                     </div>
                     <div class="form-group">
                         <h6>Date :</h6>
-                        <h5>{{vmq.visit_date}}</h5>
+                        <h5>{{vms.visit_date}}</h5>
                     </div>
                   </div>
                   <div class="form-row">
                     <div class="form-group">
                         <h6>Visited :</h6>
-                        <h5>{{vmq.employee}}</h5>
+                        <h5>{{vms.employee}}</h5>
                     </div>
                     <div class="form-group">
                         <h6>Workshop :</h6>
-                        <h5>{{vmq.workshop}}</h5>
+                        <h5>{{vms.workshop}}</h5>
                     </div>
                   </div>
 
@@ -66,62 +66,60 @@
                         <style>
                             .table-responsive h5{
                                 width: 95%;
-                                min-height: 2.5em;
-                                min-width: 7em;
-                                margin-top: .7em;
-                            }
-                            .table-responsive h6{
-                                margin-top: 1.5em;
+                                padding: .3em;
                             }
                         </style>
                         <div class="table-responsive p-0">
                             <table style="width: 95%;" class="table bordered">
                                 <thead>
-                                <tr>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Theme</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Item</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Results</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Types</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comment</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-                                </tr>
+                                    <tr>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Observations</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Condition Type</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Dialogue Answer</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action Type</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Manager / Delay</th>
+                                    </tr>
                                 </thead>
-                                <tbody>
-                                        {% for item,vmq_item in zip_items %}
+                                <style>
+                                    .textarea_details{
+                                        width: 17em;
+                                        min-width: 17em;
+                                        height: 10em; 
+                                        min-height: 10em; 
+                                        font-size: .8em;
+                                    }
+                                    .case{
+                                        font-size: .8em;
+                                        height: .5em;
+                                    }
+                                </style>
+                                <tbody class='field_wrapper'>
+                                    {% for vms_item in vms_items %}
                                         <tr>
                                             <td>
-                                                <h6 style="width: 15em;"><span class="text-secondary text-xs font-weight-bold">{{item.theme}}</span></h6>
+                                                <h5 class="form__group"><p class="textarea_details">{{vms_item.observation}}</p></h5>
                                             </td>
                                             <td>
-                                                <h6 style="width: 20em;"><span class="text-secondary text-xs font-weight-bold">{{item.name}}</span></h6>
+                                                <h5 style="margin-top: 3.5em;" class="form__group"><p class="case">{{vms_item.condition_type}}</p></h5>
                                             </td>
                                             <td>
-                                                <div class="form-group">
-                                                    <h5>{{vmq_item.result}}</h5>
-                                                </div>
+                                                <h5 class="form__group"><p class="textarea_details">{{vms_item.dialogue_answer}}</p></h5>
                                             </td>
                                             <td>
-                                                <div class="form-group">
-                                                    <h5>{{vmq_item.type}}</h5>
-                                                </div>
+                                                <h5 style="margin-top: 3.5em;" class="form__group"><p class="case">{{vms_item.action_type}}</p></h5>
                                             </td>
                                             <td>
-                                                <div class="form-group">
-                                                    <h5>{{vmq_item.comment}}</h5>
-                                                </div>
+                                                <h5 class="form__group"><p class="textarea_details">{{vms_item.action}}</p></h5>
                                             </td>
                                             <td>
                                                 <div class="form-group">
-                                                    <h5>{{vmq_item.action}}</h5>
+                                                    <h5 style="margin-top: 2em;" class="form__group"><p class="case">{{vms_item.manager}}</p></h5>
+                                                    <h5 class="form__group"><p class="case">{{vms_item.delay}}</p></h5>
                                                 </div>
                                             </td>
-                    
-                                        {% empty %}
-                                            <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">No data</span>
-                                            </td>
-                                        </tr>    
-                                        {% endfor %}                                    
+                                        </tr>
+                                    {% endfor %}     
                                 </tbody>
                             </table>
                         </div>

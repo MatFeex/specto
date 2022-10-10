@@ -1,0 +1,205 @@
+{% extends 'main.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="col-lg-6 mb-lg-0 mb-4 offset-2"  style="width: 90%; margin: auto;"> 
+    <div class="card z-index-2 ">
+        <div class="card-header pb-0">
+            <h6>CREATE A NEW VMS</h6>
+            <hr>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+            <form action="" method="POST">  
+                {% csrf_token %}
+                <style>
+                    .form-row{
+                        display: flex;
+                        margin: 1.5em;
+                    }
+                    .form-group{
+                        margin-left: .5em;
+                        width: 100%;
+                    }
+                    .input-form{
+                        border: 1px solid #bcb9b9;
+                        padding: .5rem;
+                        border-radius: 10px;
+                        width: 95%;
+                        margin-bottom: .5em;
+                    }
+                </style>
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ vms_form.user|as_crispy_field }}
+                    </div>
+                    <div class="form-group">
+                      {{ vms_form.reference|as_crispy_field }}
+                    </div>
+                    <div class="form-group">
+                      {{ vms_form.visit_date|as_crispy_field }}
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      {{ vms_form.employee|as_crispy_field }}
+                    </div>
+                    <div class="form-group">
+                      {{ vms_form.workshop|as_crispy_field }}
+                    </div>
+                  </div>
+                  <hr style="height: 2px; margin: 0 2em 0 2em;">
+                  <div class="form-row">
+                    <div class="form-group">
+                        <div class="table-responsive p-0">
+                            <table style="width: 95%;" class="table bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Observations</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Condition Type</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Dialogue Answer</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action Type</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Manager / Delay</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">-</th>
+                                    </tr>
+                                </thead>
+                                <style>
+                                    textarea{
+                                        width: 17em;
+                                        min-width: 17em;
+                                        height: 10em; 
+                                        min-height: 10em; 
+                                        font-size: .8em;
+                                    }
+                                    tbody select{
+                                        margin-top: 3em;
+                                    }
+                                    tbody input{
+                                        font-size: .8em;
+                                    }
+                                </style>
+                                <tbody class='field_wrapper' id="body">
+                                    <tr>
+                                        <td>
+                                            <center><textarea required placeholder="Enter observations..." class="input-form" type="text" name="observation" cols="100" rows="10"></textarea></center>
+                                        </td>
+                                        <td>
+                                            <select style="width: 10.5em;" name="condition_type" class="select form-select">
+                                                <option>PP</option>
+                                                <option>AD</option>
+                                                <option>CD</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <center><textarea class="input-form" placeholder="Enter the answers... (optional)" type="text" name="dialogue_answer" cols="100" rows="10"></textarea></center>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <select style="width: 10.5em;" name="action_type" class="select form-select">
+                                                    <option></option>
+                                                    <option>IMM</option>
+                                                    <option>DIF</option>
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <center><textarea placeholder="Enter the actions... (optional)" class="input-form" type="text" name="action" cols="100" rows="10"></textarea></center>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group">
+                                                <center><input style="width: 9em; margin-top: 2em;"class="input-form" type="text" maxlength="29" placeholder="Manager..." name="manager"/></center>
+                                                <center><input style="width: 9em;"class="input-form" type="date" maxlength="29" value="{{today}}" name="delay"/></center>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="form-group" style="margin-top: 3em;">
+                                                <center><a style="font-size: 2em; font-weight: bold;" href="javascript:void(0);" class="add_button" title="Add field">+</a></center>
+                                            </div>
+                                        </td>
+                                    </tr>     
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                  </div>
+                <br>
+                <center><div>
+                    <a class ="btn btn-outline-primary btn-sm mb-0 me-3" onclick="history.back()">Cancel</a>
+                    <input  type="submit" value="Submit" class="btn btn-outline-primary btn-sm mb-0 me-3" >
+                </div></center>
+            </form> 
+        </div>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var addButton = $('.add_button'); //Add button selector
+            var wrapper = $('.field_wrapper'); //Input field wrapper
+            var fieldHTML = 
+            '<tr>\
+                <td>\
+                    <center><textarea required placeholder="Enter observations..." class="input-form" type="text" name="observation" cols="100" rows="10"></textarea></center>\
+                </td>\
+                <td>\
+                    <select style="width: 10.5em;" name="condition_type" class="select form-select">\
+                        <option>PP</option>\
+                        <option>AD</option>\
+                        <option>CD</option>\
+                    </select>\
+                </td>\
+                <td>\
+                    <div class="form-group">\
+                        <center><textarea class="input-form" placeholder="Enter the answers... (optional)" type="text" name="dialogue_answer" cols="100" rows="10"></textarea></center>\
+                    </div>\
+                </td>\
+                <td>\
+                    <div class="form-group">\
+                        <select style="width: 10.5em;" name="action_type" class="select form-select">\
+                            <option></option>\
+                            <option>IMM</option>\
+                            <option>DIF</option>\
+                        </select>\
+                    </div>\
+                </td>\
+                <td>\
+                    <div class="form-group">\
+                        <center><textarea placeholder="Enter the actions... (optional)" class="input-form" type="text" name="action" cols="100" rows="10"></textarea></center>\
+                    </div>\
+                </td>\
+                <td>\
+                    <div class="form-group">\
+                        <center><input style="width: 9em; margin-top: 2em;"class="input-form" type="text" maxlength="29" placeholder="Manager..." name="manager"/></center>\
+                        <center><input style="width: 9em;"class="input-form" type="date" maxlength="29" value="{{today}}" name="delay"/></center>\
+                    </div>\
+                </td>\
+                <td>\
+                    <div class="form-group" style="margin-top: 3em;">\
+                        <center><a style="font-size: 1.5em; color:#E64848;" href="javascript:void(0);" class="remove_button" title="remove field">✖</a></center>\
+                    </div>\
+                </td>\
+            </tr>'
+            
+            //Once add button is clicked
+            $(addButton).click(function(){
+                $(wrapper).append(fieldHTML); //Add field html
+                
+            });
+            //Once remove button is clicked
+            $(wrapper).on('click', '.remove_button', function(e){
+                e.preventDefault();
+                $(this).parent('center').parent('div').parent('td').parent('tr').remove();
+            });
+        });
+    </script>
+</div>
+
+
+{% endblock content%}
