@@ -1,7 +1,7 @@
 from itertools import product
 from django.shortcuts import render, redirect
-from .models import Division, Employee, Program, Product, Workshop
-from .forms import DivisionForm, EmployeeFileForm, ProgramForm, ProductForm, WorkshopForm
+from .models import Division, Employee, Program, Product, Workshop, Qualification
+from .forms import DivisionForm, EmployeeFileForm, ProgramForm, ProductForm, WorkshopForm, QualificationForm
 from django.contrib import messages
 
 import os
@@ -390,4 +390,61 @@ def upload_employee(request):
     context = {'form':form}
     return render(request,'configuration/employee/upload_employee.html',context)
 
-# ...
+
+# CRUD-R for DIVISION
+def read_qualification(request):
+    qualifications = Qualification.objects.all()
+    qualification_count = qualifications.count()
+    context = {'qualifications':qualifications,'qualification_count':qualification_count}
+    return render(request,'configuration/qualification/qualification.html',context)
+
+
+def read_deleted_qualification(request):
+    qualifications = Qualification.deleted_objects.all()
+    qualification_count = qualifications.count()
+    context = {'qualifications':qualifications,'qualification_count':qualification_count}
+    return render(request,'configuration/qualification/deleted_qualification.html',context)
+
+
+def create_qualification(request):
+    form = QualificationForm()
+    if request.method == 'POST' :
+        form = QualificationForm(request.POST)
+        if form.is_valid(): 
+            form.save()
+            return redirect('qualification')
+        else : messages.error(request, 'An error occurred while adding a qualification')
+    context = {'form':form, 'text':'CREATE A NEW DIVISION'}
+    return render(request, 'configuration/form.html', context)
+
+
+def update_qualification(request,qualification_id):
+    qualification = Qualification.objects.get(id=qualification_id)
+    form = QualificationForm(instance=qualification)
+    if request.method == 'POST' :
+        form = QualificationForm(request.POST, instance=qualification)
+        if form.is_valid() : 
+            form.save()
+            return redirect('qualification')
+        else : messages.error(request, 'An error occurred while updating the qualification')
+    context = {'form':form,'text':'UPDATE THE DIVISION'}
+    return render(request, 'configuration/form.html', context)
+
+
+def delete_qualification(request,qualification_id):
+    qualification = Qualification.objects.get(id=qualification_id)
+    if request.method == 'POST' :
+        qualification.soft_deleted()
+        return redirect('qualification')
+    context = {'obj':qualification}
+    return render(request,'configuration/delete.html',context)
+
+
+def restore_qualification(request,qualification_id):
+    qualification = Qualification.deleted_objects.get(id=qualification_id)
+    if request.method == 'POST' :
+        qualification.restore()
+        return redirect('qualification')
+
+    context = {'obj':qualification}
+    return render(request,'configuration/restore.html',context)

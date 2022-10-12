@@ -39,6 +39,13 @@ urlpatterns = [
     path('configuration/division/<division_id>/program/<program_id>/product/<product_id>/workshop/<workshop_id>/delete-workshop/',views.delete_workshop, name="delete-workshop"),
     path('configuration/division/<division_id>/program/<program_id>/product/<product_id>/workshop/<workshop_id>/restore-workshop/',views.restore_workshop, name="restore-workshop"),
 
+    # urls for QUALIFICATIONS
+    path('configuration/qualification/deleted-qualification/',views.read_deleted_qualification, name="deleted-qualification"),
+    path('configuration/qualification/',views.read_qualification, name="qualification"),
+    path('configuration/qualification/create-qualification/',views.create_qualification, name="create-qualification"),
+    path('configuration/qualification/<qualification_id>/update-qualification/',views.update_qualification, name="update-qualification"),
+    path('configuration/qualification/<qualification_id>/delete-qualification/',views.delete_qualification, name="delete-qualification"),
+    path('configuration/qualification/<qualification_id>/restore-qualification/',views.restore_qualification, name="restore-qualification"),
 
     # urls for EMPLOYEE
     path('configuration/employee/',views.read_employee, name="employee"),

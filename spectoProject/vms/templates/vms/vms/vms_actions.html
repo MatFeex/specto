@@ -7,7 +7,7 @@
 <div class="col-lg-6 mb-lg-0 mb-4 offset-2"  style="width: 90%; margin: auto;"> 
     <div class="card z-index-2 ">
         <div class="card-header pb-0">
-        <h6>VMQ - ACTIONS LIST</h6>
+        <h6>VMS - ACTIONS LIST</h6>
         <hr>
         </div>
         <div class="card-body px-0 pt-0 pb-2">
@@ -50,31 +50,27 @@
                             <table style="width: 95%;" class="table bordered">
                                 <thead>
                                     <tr>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">VMQ ID</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">VMQ REF</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">VMQ Theme</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">VMQ Item</th>
-                                        <th style="min-width: 20em;" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">VMS ID</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">VMS REF</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action Type</th>
+                                        <th style="min-width: 30em;" class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                        {% for vmq_item in vmq_items %}
+                                        {% for vms_item in vms_items %}
                                         <tr>
                                             <td>
-                                                <center><h6><span class="text-secondary text-xs font-weight-bold">{{vmq_item.vmq.id}}</span></h6></center>
+                                                <center><h6><span class="text-secondary text-xs font-weight-bold">{{vms_item.vms.id}}</span></h6></center>
                                             </td>
                                             <td>
-                                                <center><h6><span class="text-secondary text-xs font-weight-bold">{{vmq_item.vmq.reference}}</span></h6></center>
+                                                <center><h6><span class="text-secondary text-xs font-weight-bold">{{vms_item.vms.reference}}</span></h6></center>
                                             </td>
                                             <td>
-                                                <h6 style="width: 15em;"><span class="text-secondary text-xs font-weight-bold">{{vmq_item.item.theme.name}}</span></h6>
-                                            </td>
-                                            <td>
-                                                <h6 style="width: 20em;"><span class="text-secondary text-xs font-weight-bold">{{vmq_item.item.name}}</span></h6>
+                                                <center><h6><span class="text-secondary text-xs font-weight-bold">{{vms_item.action_type}}</span></h6></center>
                                             </td>
                                             <td>
                                                 <div class="form-group">
-                                                    <textarea readonly style="min-height: 5em;">{{vmq_item.action}}</textarea>
+                                                    <textarea readonly style="min-height: 5em;">{{vms_item.action}}</textarea>
                                                 </div>
                                             </td>
                                         </tr>

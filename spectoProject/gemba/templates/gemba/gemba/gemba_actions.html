@@ -20,6 +20,7 @@
                         margin-left: .5em;
                         width: 100%;
                     }
+                    .form-group textarea,
                     .form-group h5{
                         background: transparent;
                         border: 1px solid #bcb9b9;
@@ -69,7 +70,7 @@
                                             </td>
                                             <td>
                                                 <div class="form-group">
-                                                    <h5>{{gemba_gemba_item.action}}</h5>
+                                                    <textarea readonly style="min-height: 5em;">{{gemba_gemba_item.action}}</textarea>
                                                 </div>
                                             </td>
                                         </tr>

@@ -1,6 +1,6 @@
 from dataclasses import field
 from django.forms import ModelForm
-from .models import Division, Program, Product, Workshop, Employee, EmployeeFile
+from .models import Division, Program, Product, Qualification, Workshop, Employee, EmployeeFile
 from django import forms
 
 class DivisionForm(ModelForm):
@@ -36,3 +36,8 @@ class EmployeeFileForm(ModelForm):
     class Meta:
         model = EmployeeFile
         fields = '__all__'
+
+class QualificationForm(ModelForm):
+    class Meta:
+        model = Qualification
+        fields = ['employee','vms_qualification','vmq_qualification','fives_qualification']

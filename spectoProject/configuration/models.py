@@ -1,3 +1,4 @@
+from email.policy import default
 from django.utils import timezone
 from msilib.schema import Error
 from django.db import models
@@ -118,3 +119,12 @@ class Employee(models.Model): # does not inherit from BaseModel/SoftDeleteModel 
     def __str__(self):
         return str(self.names)
 
+
+class Qualification(BaseModel,SoftDeleteModel):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    vms_qualification = models.BooleanField(default=False)
+    vmq_qualification = models.BooleanField(default=False)
+    fives_qualification = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.employee.names + ' Qualifications'

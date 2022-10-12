@@ -3,6 +3,7 @@ from .models import Vms, VmsItem
 from .forms import VmsForm
 from django.contrib import messages
 from datetime import datetime
+from django.db.models import Q
 
    
 # CRUD-R for VMS
@@ -20,6 +21,10 @@ def read_specific_vms(request,vms_id):
     context = {'vms':vms,'vms_items':vms_items}
     return render(request,'vms/vms/vms_details.html',context)
 
+def read_vms_actions(request):
+    vms_items = VmsItem.objects.filter(~Q(action='') & ~Q(action=None))
+    context = {'vms_items':vms_items}
+    return render(request,'vms/vms/vms_actions.html',context)
 
 def read_deleted_vms(request):
     vmss = Vms.deleted_objects.all()
