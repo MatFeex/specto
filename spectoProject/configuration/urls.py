@@ -47,6 +47,9 @@ urlpatterns = [
     path('configuration/qualification/<qualification_id>/delete-qualification/',views.delete_qualification, name="delete-qualification"),
     path('configuration/qualification/<qualification_id>/restore-qualification/',views.restore_qualification, name="restore-qualification"),
 
+    # urls VMS PLANNING
+    path('configuration/planning/vms-planning/planning/',views.vms_planning, name="vms-planning"),
+
     # urls for EMPLOYEE
     path('configuration/employee/',views.read_employee, name="employee"),
     path('configuration/employee/upload-employee/',views.upload_employee, name="upload-employee"),

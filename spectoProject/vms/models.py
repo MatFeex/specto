@@ -12,7 +12,7 @@ class Vms(BaseModel, SoftDeleteModel):
     reference = models.CharField(max_length=100, default="REF")
     visit_date = models.DateField(default=timezone.now)
     user = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee,to_field="matricule", on_delete=models.CASCADE)
     workshop = models.ForeignKey(Workshop, on_delete=models.CASCADE)
 
     def __str__(self):

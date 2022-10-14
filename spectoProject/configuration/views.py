@@ -1,7 +1,6 @@
-from itertools import product
 from django.shortcuts import render, redirect
-from .models import Division, Employee, Program, Product, Workshop, Qualification
-from .forms import DivisionForm, EmployeeFileForm, ProgramForm, ProductForm, WorkshopForm, QualificationForm
+from .models import Division, Employee, Program, Product, VMS_Planning, Workshop, Qualification
+from .forms import DivisionForm, EmployeeFileForm, EmployeeForm, ProgramForm, ProductForm, Vms_PlanningForm, WorkshopForm, QualificationForm
 from django.contrib import messages
 
 import os
@@ -295,100 +294,144 @@ def upload_employee(request):
             file_path = os.getcwd().replace("\\",'/') + '/configuration/handle_uploaded_file/' + os.listdir("configuration/handle_uploaded_file")[0]
 
             if os.path.isfile(file_path) : 
+                try: 
+                    # DELETE PREVIOUS UPLOADED FILE
+                    for file in os.listdir("configuration/handle_uploaded_file") : os.remove(f'configuration/handle_uploaded_file/{file}')
+                
+                    form.save() # keep an uploaded files history in EmployeeFile Model
 
-                # DELETE PREVIOUS UPLOADED FILE
-                for file in os.listdir("configuration/handle_uploaded_file") : os.remove(f'configuration/handle_uploaded_file/{file}')
+                    # DATA PROCESSING
+                    data = pd.read_excel(file_path) # read the new uploaded file
+                    
+                    # get objects
+                    programs = Program.objects.values('name','id')
+                    products = Product.objects.values('name','id')
+                    workshops = Workshop.objects.values('name','id')
+
+                    # obj to df
+                    df_programs = pd.DataFrame(list(programs))
+                    df_products = pd.DataFrame(list(products))
+                    df_workshop = pd.DataFrame(list(workshops))
+                    
+                    # df to dict
+                    dict_programs, dict_products, dict_workshop = [],[],[]
+                    try :
+                        dict_programs = dict(zip(df_programs.name,df_programs.id))
+                        dict_products = dict(zip(df_products.name,df_products.id))
+                        dict_workshop = dict(zip(df_workshop.name,df_workshop.id))
+                    except : messages.error(request, 'Default values will be given for missing information about programs, products and workshops')
+
+                    # mapping
+                    program_id = data['Affaire'].map(dict_programs).values[0] if dict_programs else 'nan'
+                    product_id = data['Produit'].map(dict_products).values[0] if dict_products else 'nan'
+                    workshop_id = data['Phase'].map(dict_workshop).values[0] if dict_workshop else 'nan'
+
+                    # give default ID if cannot map
+                    program_id = int(str(program_id).replace('nan','1'))
+                    product_id = int(str(product_id).replace('nan','1'))
+                    workshop_id = int(str(workshop_id).replace('nan','1'))
+
+                    # delete useless columns
+                    data = data.drop(columns=['Affaire', 'Produit','Phase'])
+
+                    data.insert(13,'division_id',1) # add DIVISION column that doesn't exist in the file
+                    data.insert(14,'program_id',program_id)
+                    data.insert(15,'product_id',product_id)
+                    data.insert(16,'workshop_id',workshop_id)
+                    
+                    for i in range(len(data)):
+                        matricule = data.loc[i,'Mat']
+                        employee = Employee.objects.filter(matricule=matricule).first()
+                        if employee : 
+                            employee_form = EmployeeForm(instance=employee).save(commit=False)                
+                            employee_form.matricule = data.iloc[i,0]
+                            employee_form.names = data.iloc[i,1]
+                            employee_form.i_p = data.iloc[i,2]
+                            employee_form.code = data.iloc[i,3]
+                            employee_form.department = data.iloc[i,4]
+                            employee_form.wording = data.iloc[i,5]
+                            employee_form.cost_center = data.iloc[i,6]
+                            employee_form.job_bulletin = data.iloc[i,7]
+                            employee_form.resp_matricule_n1 = data.iloc[i,8]
+                            employee_form.resp_names_n1 = data.iloc[i,9]
+                            employee_form.resp_matricule_n2 = data.iloc[i,10]
+                            employee_form.resp_names_n2 = data.iloc[i,11]
+                            employee_form.staff_tab_afs = data.iloc[i,12]
+                            employee_form.division_id = data.iloc[i,13]
+                            employee_form.program_id = data.iloc[i,14]
+                            employee_form.product_id = data.iloc[i,15]
+                            employee_form.workshop_id = data.iloc[i,16]
+                            employee_form.save()
+                        else:
+                            Employee.objects.create(
+                                matricule = data.iloc[i,0],
+                                names = data.iloc[i,1],
+                                i_p = data.iloc[i,2],
+                                code = data.iloc[i,3],
+                                department = data.iloc[i,4],
+                                wording = data.iloc[i,5],
+                                cost_center = data.iloc[i,6],
+                                job_bulletin = data.iloc[i,7],
+                                resp_matricule_n1 = data.iloc[i,8],
+                                resp_names_n1 = data.iloc[i,9],
+                                resp_matricule_n2 = data.iloc[i,10],
+                                resp_names_n2 = data.iloc[i,11],
+                                staff_tab_afs = data.iloc[i,12],
+                                division_id = data.iloc[i,13],
+                                program_id = data.iloc[i,14],
+                                product_id = data.iloc[i,15],
+                                workshop_id = data.iloc[i,16],
+                            )
+                
+                except : messages.error(request, 'File not valid : it must contain at least 16 columns')
             
-                form.save() # keep an uploaded files history in EmployeeFile Model
-
-                # DELETE PREVIOUS EMPLOYEE DATA IN EMPLOYEE DATABASE
-                Employee.objects.all().delete()
-
-                # DATA PROCESSING
-                data = pd.read_excel(file_path) # read the new uploaded file
-                
-                # get objects
-                programs = Program.objects.values('name','id')
-                products = Product.objects.values('name','id')
-                workshops = Workshop.objects.values('name','id')
-
-                # obj to df
-                df_programs = pd.DataFrame(list(programs))
-                df_products = pd.DataFrame(list(products))
-                df_workshop = pd.DataFrame(list(workshops))
-                
-                # df to dict
-                dict_programs, dict_products, dict_workshop = [],[],[]
-                try :
-                    dict_programs = dict(zip(df_programs.name,df_programs.id))
-                    dict_products = dict(zip(df_products.name,df_products.id))
-                    dict_workshop = dict(zip(df_workshop.name,df_workshop.id))
-                except : messages.error(request, 'Default values will be given for missing information about programs, products and workshops')
-
-                # mapping
-                program_id = data['Affaire'].map(dict_programs).values[0] if dict_programs else 'nan'
-                product_id = data['Produit'].map(dict_products).values[0] if dict_products else 'nan'
-                workshop_id = data['Phase'].map(dict_workshop).values[0] if dict_workshop else 'nan'
-
-                # give default ID if cannot map
-                program_id = int(str(program_id).replace('nan','1'))
-                product_id = int(str(product_id).replace('nan','1'))
-                workshop_id = int(str(workshop_id).replace('nan','1'))
-
-                # delete useless columns
-                data = data.drop(columns=['Affaire', 'Produit','Phase'])
-
-                data.insert(13,'division_id',1) # add DIVISION column that doesn't exist in the file
-                data.insert(14,'program_id',program_id)
-                data.insert(15,'product_id',product_id)
-                data.insert(16,'workshop_id',workshop_id)
-
-                print(data)
-
-                
-                # CONNETION TO DATABASE
-                conn = psycopg2.connect(host='localhost',dbname='specto_db',user='postgres',password='specto777',port='5432')
-
-                empoyee_file = StringIO()
-                empoyee_file.write(data.to_csv(index=None, header=None,sep=';'))
-                empoyee_file.seek(0)
-                with conn.cursor() as c:
-                    c.copy_from(
-                        file=empoyee_file,
-                        null="",
-                        sep=";",
-                        table='configuration_employee',
-                        columns=[
-                            'matricule',
-                            'names',
-                            'i_p',
-                            'code', 
-                            'department',
-                            'wording',
-                            'cost_center',
-                            'job_bulletin',
-                            'resp_matricule_n1',
-                            'resp_names_n1',
-                            'resp_matricule_n2',
-                            'resp_names_n2',
-                            'staff_tab_afs',
-                            'division_id',
-                            'program_id',
-                            'product_id',
-                            'workshop_id',
-                        ]
-                    )
-                try :
-                    conn.commit()
-                    return redirect('employee')
-                except : messages.error(request, 'An error occured : please register at least a divison, a program, a product and a workshop before uploading employees')
-
             else : messages.error(request, 'The path file is unreachable')
 
         else : messages.error(request, 'An error occurred : file not valid')
 
     context = {'form':form}
     return render(request,'configuration/employee/upload_employee.html',context)
+
+
+
+# # CONNETION TO DATABASE
+# conn = psycopg2.connect(host='localhost',dbname='specto_db',user='postgres',password='specto777',port='5432')
+
+# empoyee_file = StringIO()
+# empoyee_file.write(data.to_csv(index=None, header=None,sep=';'))
+# empoyee_file.seek(0)
+# with conn.cursor() as c:
+#     c.copy_from(
+#         file=empoyee_file,
+#         null="",
+#         sep=";",
+#         table='configuration_employee',
+#         columns=[
+#             'matricule',
+#             'names',
+#             'i_p',
+#             'code', 
+#             'department',
+#             'wording',
+#             'cost_center',
+#             'job_bulletin',
+#             'resp_matricule_n1',
+#             'resp_names_n1',
+#             'resp_matricule_n2',
+#             'resp_names_n2',
+#             'staff_tab_afs',
+#             'division_id',
+#             'program_id',
+#             'product_id',
+#             'workshop_id',
+#         ]
+#     )
+# try :
+#     conn.commit()
+#     return redirect('employee')
+# except : messages.error(request, 'An error occured : please register at least a divison, a program, a product and a workshop before uploading employees')
+
+
 
 
 # CRUD-R for DIVISION
@@ -411,13 +454,12 @@ def create_qualification(request):
     if request.method == 'POST' :
         employee_id = request.POST.get('employee')
         qualification = Qualification.objects.filter(employee_id=employee_id).first()
-        print(qualification)
         if qualification : 
             update_qualification(request,qualification.id)
             return redirect('qualification')
         else :
             form = QualificationForm(request.POST)
-            if form.is_valid(): 
+            if form.is_valid():
                 form.save()
                 return redirect('qualification')
             else : messages.error(request, 'An error occurred while adding a qualification')
@@ -455,3 +497,26 @@ def restore_qualification(request,qualification_id):
 
     context = {'obj':qualification}
     return render(request,'configuration/restore.html',context)
+
+
+def vms_planning(request):
+
+    if request.method == 'POST':
+
+        month = request.POST.get('month')
+        year = request.POST.get('year')
+
+        employees_qualified = Qualification.objects.filter(vms_qualification=True)
+        for employee_qualified in employees_qualified : 
+            form = Vms_PlanningForm().save(commit=False)
+            form.employee_qualified = Employee.objects.filter(matricule=employee_qualified.employee.matricule).first()
+            form.employee1_visited = Employee.objects.filter(matricule=81780).first()
+            form.employee2_visited = Employee.objects.filter(matricule=81780).first()
+            form.month = month
+            form.year = year
+            form.save()
+
+        render(request,'configuration/planning/vms_planning.html')
+
+    return render(request,'configuration/planning/vms_planning_date.html')
+
