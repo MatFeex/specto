@@ -1,4 +1,5 @@
 from email.policy import default
+from enum import unique
 from django.utils import timezone
 from msilib.schema import Error
 from django.db import models
@@ -92,12 +93,14 @@ class Workshop(BaseModel,SoftDeleteModel):
     def __str__(self):
         return self.name
 
+
 class EmployeeFile(models.Model):
     employee_data_file = models.FileField(upload_to='configuration/handle_uploaded_file') # to create a file input in templates
 
+
 class Employee(models.Model): # does not inherit from BaseModel/SoftDeleteModel because managed from upload
 
-    matricule = models.IntegerField()
+    matricule = models.IntegerField(unique=True)
     names = models.CharField(max_length= 100)
     i_p = models.CharField(max_length=2)
     code = models.CharField(max_length=50)
@@ -121,7 +124,7 @@ class Employee(models.Model): # does not inherit from BaseModel/SoftDeleteModel 
 
 
 class Qualification(BaseModel,SoftDeleteModel):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, to_field="matricule", db_column="matricule",on_delete=models.CASCADE)
     vms_qualification = models.BooleanField(default=False)
     vmq_qualification = models.BooleanField(default=False)
     fives_qualification = models.BooleanField(default=False)

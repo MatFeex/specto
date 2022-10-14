@@ -41,3 +41,6 @@ class QualificationForm(ModelForm):
     class Meta:
         model = Qualification
         fields = ['employee','vms_qualification','vmq_qualification','fives_qualification']
+        labels = {
+            'fives_qualification': '5S qualification',
+        }

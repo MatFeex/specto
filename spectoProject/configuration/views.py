@@ -409,12 +409,19 @@ def read_deleted_qualification(request):
 def create_qualification(request):
     form = QualificationForm()
     if request.method == 'POST' :
-        form = QualificationForm(request.POST)
-        if form.is_valid(): 
-            form.save()
+        employee_id = request.POST.get('employee')
+        qualification = Qualification.objects.filter(employee_id=employee_id).first()
+        print(qualification)
+        if qualification : 
+            update_qualification(request,qualification.id)
             return redirect('qualification')
-        else : messages.error(request, 'An error occurred while adding a qualification')
-    context = {'form':form, 'text':'CREATE A NEW DIVISION'}
+        else :
+            form = QualificationForm(request.POST)
+            if form.is_valid(): 
+                form.save()
+                return redirect('qualification')
+            else : messages.error(request, 'An error occurred while adding a qualification')
+    context = {'form':form, 'text':'CREATE A NEW QUALIFICATION'}
     return render(request, 'configuration/form.html', context)
 
 
@@ -427,7 +434,7 @@ def update_qualification(request,qualification_id):
             form.save()
             return redirect('qualification')
         else : messages.error(request, 'An error occurred while updating the qualification')
-    context = {'form':form,'text':'UPDATE THE DIVISION'}
+    context = {'form':form,'text':'UPDATE THE QUALIFICATION'}
     return render(request, 'configuration/form.html', context)
 
 
