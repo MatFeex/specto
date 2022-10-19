@@ -137,7 +137,7 @@ class Qualification(BaseModel,SoftDeleteModel):
 class VMS_Planning(BaseModel,SoftDeleteModel):
 
     employee_qualified = models.ForeignKey(Employee,to_field="matricule", related_name='employee_qualified', on_delete=models.CASCADE)
-    employee1_visited = models.ForeignKey(Employee,to_field="matricule",related_name='employee1_visited',on_delete=models.CASCADE)
-    employee2_visited = models.ForeignKey(Employee,to_field="matricule",related_name='employee2_visited',on_delete=models.CASCADE)
+    employee_visited = models.ForeignKey(Employee,to_field="matricule",related_name='employee1_visited',on_delete=models.CASCADE)
     month = models.CharField(max_length=5)
     year = models.IntegerField()
+    closed = models.BooleanField(default=False)

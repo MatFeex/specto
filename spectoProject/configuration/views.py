@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect
 from .models import Division, Employee, Program, Product, VMS_Planning, Workshop, Qualification
+from vms.models import Vms
+
 from .forms import DivisionForm, EmployeeFileForm, EmployeeForm, ProgramForm, ProductForm, Vms_PlanningForm, WorkshopForm, QualificationForm
 from django.contrib import messages
+from django.db.models import Q
 
 import os
-import psycopg2
 import pandas as pd
-from io import StringIO 
-
+from itertools import cycle
 
 # SPECTO VIEWS - CONFIGURATION :
 
@@ -382,7 +383,7 @@ def upload_employee(request):
                                 product_id = data.iloc[i,15],
                                 workshop_id = data.iloc[i,16],
                             )
-                
+                        return redirect('employee')
                 except : messages.error(request, 'File not valid : it must contain at least 16 columns')
             
             else : messages.error(request, 'The path file is unreachable')
@@ -430,8 +431,6 @@ def upload_employee(request):
 #     conn.commit()
 #     return redirect('employee')
 # except : messages.error(request, 'An error occured : please register at least a divison, a program, a product and a workshop before uploading employees')
-
-
 
 
 # CRUD-R for DIVISION
@@ -499,24 +498,72 @@ def restore_qualification(request,qualification_id):
     return render(request,'configuration/restore.html',context)
 
 
+# VMS PLANNING
+
 def vms_planning(request):
+    vms_planning = VMS_Planning.objects.all().order_by('-year')
+    return render(request,'configuration/planning/vms/vms_planning.html',{'vms_planning':vms_planning})
+
+
+def create_vms_planning(request):
+
+    # questions : 
+    
+    # - VMS CREATE :
+    # Visitor/User est pas un employé - relier User - Employees?
+    # Visited = Employee : ajouter un listener sur Visitor pour proposer que les Visited appropriés ?
+    # Pareil pour Workshop, ajouter un listener pour mettre à jour le Workshop propre à l'employee ? Comment?
+    # SUBMIT - CREATION : boolean closed designer les 2 visités, pas qu'un, VMS d'1 employé = 2
+
+    # VMS Planning :
+    # Comment gérer la loop ?
+
 
     if request.method == 'POST':
 
+        # GET PLANNING DATES
         month = request.POST.get('month')
         year = request.POST.get('year')
 
-        employees_qualified = Qualification.objects.filter(vms_qualification=True)
-        for employee_qualified in employees_qualified : 
+        # delete previous planning one the same period
+        VMS_Planning.objects.filter(month=month,year=year).delete()
+
+        # GET employees QUALIFIED
+        employees_qualified = Qualification.objects.filter(vms_qualification=True).values_list('employee', flat=True)
+        count_qualified = employees_qualified.count()
+        
+        # GET employees already VISITED
+        employee_visited = VMS_Planning.objects.filter(closed=True).values_list('employee_visited', flat=True)
+
+        # # GET employees NOT VISITED
+        employee_not_visited = Employee.objects.exclude(matricule__in=employee_visited).values_list('matricule', flat=True)
+        count_not_visited = employee_not_visited.count()
+        print(employee_visited)
+        print(employee_not_visited)
+
+        
+        # if NB Employees To Visit >= NB Employees Qualified * 2 --> Next visited are only in Employee database
+        if count_not_visited >= count_qualified*2 : 
+            employee_to_be_visited = employee_not_visited[:count_qualified*2]
+       
+        else : # if NB Employees To Visit < NB Employees Qualified * 2 --> Next visited are the ones in Employee database + The first ones already visited
+            employees = Employee.objects.values_list('matricule', flat=True) 
+            employee_to_be_visited = employee_not_visited + employees
+            employee_to_be_visited = employee_to_be_visited[:count_qualified*2]
+
+
+        zip_list = dict( zip(employee_to_be_visited, cycle(employees_qualified)) if len(employee_to_be_visited) > len(employees_qualified) else zip(cycle(employee_to_be_visited), employees_qualified))
+
+        # for employee_qualified in employees_qualified : 
+        for visited,user in zip_list.items() : 
             form = Vms_PlanningForm().save(commit=False)
-            form.employee_qualified = Employee.objects.filter(matricule=employee_qualified.employee.matricule).first()
-            form.employee1_visited = Employee.objects.filter(matricule=81780).first()
-            form.employee2_visited = Employee.objects.filter(matricule=81780).first()
+            form.employee_qualified_id = user
+            form.employee_visited_id = visited
             form.month = month
             form.year = year
             form.save()
 
-        render(request,'configuration/planning/vms_planning.html')
-
-    return render(request,'configuration/planning/vms_planning_date.html')
+        return redirect('vms-planning')
+        
+    return render(request,'configuration/planning/vms/vms_planning_date.html')
 

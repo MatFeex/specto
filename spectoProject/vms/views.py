@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Vms, VmsItem
+from configuration.models import VMS_Planning
 from .forms import VmsForm
 from django.contrib import messages
 from datetime import datetime
@@ -57,7 +58,7 @@ def create_vms(request):
 
             # CHILDS - VMS_Item - ManyToMany  
             for i in range(len(observations)) : 
-                VmsItem.objects.create( vms = Vms.objects.get(id = vms_form.instance.id),
+                VmsItem.objects.create( vms_id = vms_form.instance.id,
                                         observation = observations[i],
                                         condition_type = condition_types[i],
                                         dialogue_answer = dialogue_answers[i],
@@ -66,10 +67,17 @@ def create_vms(request):
                                         manager = managers[i],
                                         delay = delays[i],
                                         )
-            return redirect('vms')
-
+            try : 
+                employee_visited_id = Vms.objects.get(id = vms_form.instance.id).employee.matricule
+                planning_to_close = VMS_Planning.objects.filter(employee_visited_id = employee_visited_id).latest('created_at')
+                planning_to_close.closed = True
+                planning_to_close.save()
+                return redirect('vms')
+            except : messages.error(request, "The corresponding VMS Planning for the visited employee doesn't exist")
         else : messages.error(request, 'An error occurred while creating the VMS')
+    
     else : vms_form = VmsForm()
+
     context = {'vms_form':vms_form,'today':str(datetime.now())[:10]}
     return render(request, 'vms/vms/vms_form.html', context)
 

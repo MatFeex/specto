@@ -48,6 +48,6 @@ class QualificationForm(ModelForm):
 class Vms_PlanningForm(ModelForm):
     class Meta:
         model = VMS_Planning
-        fields = ['employee_qualified','employee1_visited','employee2_visited','month','year']
+        fields = ['employee_qualified','employee_visited','month','year']
         
         

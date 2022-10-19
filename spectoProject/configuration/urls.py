@@ -49,6 +49,7 @@ urlpatterns = [
 
     # urls VMS PLANNING
     path('configuration/planning/vms-planning/planning/',views.vms_planning, name="vms-planning"),
+    path('configuration/planning/vms-planning/create-planning/',views.create_vms_planning, name="create-vms-planning"),
 
     # urls for EMPLOYEE
     path('configuration/employee/',views.read_employee, name="employee"),
