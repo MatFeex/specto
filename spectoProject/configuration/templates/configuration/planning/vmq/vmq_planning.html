@@ -7,7 +7,7 @@
 <div class="col-lg-6 mb-lg-0 mb-4 offset-2"  style="width: 90%; margin: auto;"> 
     <div class="card z-index-2 ">
         <div class="card-header pb-0">
-        <h6>VMS PLANNING</h6>
+        <h6>VMQ PLANNING</h6>
         <hr>
         </div>
         <div class="card-body px-0 pt-0 pb-2">
@@ -33,13 +33,13 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for row in vms_planning %}
+                                    {% for row in vmq_planning %}
                                         <tr>
                                             <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">{{row.vms_employee_qualified}}</span>
+                                                <span class="text-secondary text-xs font-weight-bold">{{row.vmq_employee_qualified}}</span>
                                             </td>
                                             <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">{{row.vms_employee_visited}}</span>
+                                                <span class="text-secondary text-xs font-weight-bold">{{row.vmq_employee_visited}}</span>
                                             </td>
                                             <td class="align-middle text-center">
                                                 <span class="text-secondary text-xs font-weight-bold">{{row.closed}}</span>
@@ -55,7 +55,7 @@
                     </div>
                   </div>
                 <center><div>
-                    <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'vms-planning' %}">BACK</a>
+                    <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'vmq-planning' %}">BACK</a>
                 </div></center>
         </div>
     </div>

@@ -1,6 +1,6 @@
 from dataclasses import field
 from django.forms import ModelForm
-from .models import Division, Program, Product, Qualification, Workshop, Employee, EmployeeFile, VMS_Planning
+from .models import Division, Program, Product, Qualification, Workshop, Employee, EmployeeFile, VMS_Planning, VMQ_Planning
 from django import forms
 
 class DivisionForm(ModelForm):
@@ -45,9 +45,13 @@ class QualificationForm(ModelForm):
             'fives_qualification': '5S qualification',
         }
 
-class Vms_PlanningForm(ModelForm):
+class VMS_PlanningForm(ModelForm):
     class Meta:
         model = VMS_Planning
-        fields = ['employee_qualified','employee_visited','month','year']
-        
+        fields = ['vms_employee_qualified','vms_employee_visited','month','year']
+
+class VMQ_PlanningForm(ModelForm):
+    class Meta:
+        model = VMQ_Planning
+        fields = ['vmq_employee_qualified','vmq_employee_visited','month','year']
         

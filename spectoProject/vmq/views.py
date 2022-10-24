@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Theme, Item, Vmq, VmqItem
+from configuration.models import VMQ_Planning
 from .forms import ThemeForm, ItemForm, VmqForm
 from django.contrib import messages
 from django.db.models import Q
@@ -192,8 +193,12 @@ def create_vmq(request):
                                         comment = comments[i],
                                         action = actions[i],
                                         )
-            return redirect('vmq')
-
+            try : 
+                planning_to_close = VMQ_Planning.objects.filter(vmq_employee_visited_id = vmq_form.instance.employee.matricule).latest('created_at')
+                planning_to_close.closed = True
+                planning_to_close.save()
+                return redirect('vmq')
+            except : messages.error(request, "The corresponding VMQ Planning for the visited employee doesn't exist")
         else : messages.error(request, 'An error occurred while creating the VMQ')
 
     else : vmq_form = VmqForm()

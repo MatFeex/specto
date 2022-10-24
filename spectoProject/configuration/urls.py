@@ -51,6 +51,10 @@ urlpatterns = [
     path('configuration/planning/vms-planning/planning/',views.vms_planning, name="vms-planning"),
     path('configuration/planning/vms-planning/create-planning/',views.create_vms_planning, name="create-vms-planning"),
 
+    # urls VMQ PLANNING
+    path('configuration/planning/vmq-planning/planning/',views.vmq_planning, name="vmq-planning"),
+    path('configuration/planning/vmq-planning/create-planning/',views.create_vmq_planning, name="create-vmq-planning"),
+
     # urls for EMPLOYEE
     path('configuration/employee/',views.read_employee, name="employee"),
     path('configuration/employee/upload-employee/',views.upload_employee, name="upload-employee"),

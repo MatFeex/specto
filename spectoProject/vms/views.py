@@ -36,6 +36,7 @@ def read_deleted_vms(request):
 
 def create_vms(request):
 
+
     if request.method == 'POST' :
 
         # GET INPUTS
@@ -46,10 +47,11 @@ def create_vms(request):
         actions = request.POST.getlist('action')
         managers = request.POST.getlist('manager')
         delays = request.POST.getlist('delay')
-        print(delays)
         
         # VMS FORM
+        
         vms_form = VmsForm(request.POST)
+
 
         if vms_form.is_valid():
 
@@ -68,8 +70,7 @@ def create_vms(request):
                                         delay = delays[i],
                                         )
             try : 
-                employee_visited_id = Vms.objects.get(id = vms_form.instance.id).employee.matricule
-                planning_to_close = VMS_Planning.objects.filter(employee_visited_id = employee_visited_id).latest('created_at')
+                planning_to_close = VMS_Planning.objects.filter(employee_visited_id = vms_form.instance.employee.matricule).latest('created_at')
                 planning_to_close.closed = True
                 planning_to_close.save()
                 return redirect('vms')

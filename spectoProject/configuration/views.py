@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from .models import Division, Employee, Program, Product, VMS_Planning, Workshop, Qualification
+from .models import Division, Employee, Program, Product, VMS_Planning, Workshop, Qualification, VMQ_Planning
 from vms.models import Vms
 
-from .forms import DivisionForm, EmployeeFileForm, EmployeeForm, ProgramForm, ProductForm, Vms_PlanningForm, WorkshopForm, QualificationForm
+from .forms import DivisionForm, EmployeeFileForm, EmployeeForm, ProgramForm, ProductForm, VMQ_PlanningForm, WorkshopForm, QualificationForm, VMS_PlanningForm
 from django.contrib import messages
 from django.db.models import Q
 
@@ -340,6 +340,7 @@ def upload_employee(request):
                     data.insert(15,'product_id',product_id)
                     data.insert(16,'workshop_id',workshop_id)
                     
+                    print(data)
                     for i in range(len(data)):
                         matricule = data.loc[i,'Mat']
                         employee = Employee.objects.filter(matricule=matricule).first()
@@ -383,7 +384,8 @@ def upload_employee(request):
                                 product_id = data.iloc[i,15],
                                 workshop_id = data.iloc[i,16],
                             )
-                        return redirect('employee')
+                    return redirect('employee')
+
                 except : messages.error(request, 'File not valid : it must contain at least 16 columns')
             
             else : messages.error(request, 'The path file is unreachable')
@@ -507,17 +509,6 @@ def vms_planning(request):
 
 def create_vms_planning(request):
 
-    # questions : 
-    
-    # - VMS CREATE :
-    # Visitor/User est pas un employé - relier User - Employees?
-    # Visited = Employee : ajouter un listener sur Visitor pour proposer que les Visited appropriés ?
-    # Pareil pour Workshop, ajouter un listener pour mettre à jour le Workshop propre à l'employee ? Comment?
-    # SUBMIT - CREATION : boolean closed designer les 2 visités, pas qu'un, VMS d'1 employé = 2
-
-    # VMS Planning :
-    # Comment gérer la loop ?
-
 
     if request.method == 'POST':
 
@@ -533,15 +524,12 @@ def create_vms_planning(request):
         count_qualified = employees_qualified.count()
         
         # GET employees already VISITED
-        employee_visited = VMS_Planning.objects.filter(closed=True).values_list('employee_visited', flat=True)
+        vms_employee_visited = VMS_Planning.objects.filter(closed=True).values_list('vms_employee_visited', flat=True)
 
         # # GET employees NOT VISITED
-        employee_not_visited = Employee.objects.exclude(matricule__in=employee_visited).values_list('matricule', flat=True)
+        employee_not_visited = Employee.objects.exclude(matricule__in=vms_employee_visited).values_list('matricule', flat=True)
         count_not_visited = employee_not_visited.count()
-        print(employee_visited)
-        print(employee_not_visited)
 
-        
         # if NB Employees To Visit >= NB Employees Qualified * 2 --> Next visited are only in Employee database
         if count_not_visited >= count_qualified*2 : 
             employee_to_be_visited = employee_not_visited[:count_qualified*2]
@@ -554,11 +542,11 @@ def create_vms_planning(request):
 
         zip_list = dict( zip(employee_to_be_visited, cycle(employees_qualified)) if len(employee_to_be_visited) > len(employees_qualified) else zip(cycle(employee_to_be_visited), employees_qualified))
 
-        # for employee_qualified in employees_qualified : 
+        # for vms_employee_qualified in employees_qualified : 
         for visited,user in zip_list.items() : 
-            form = Vms_PlanningForm().save(commit=False)
-            form.employee_qualified_id = user
-            form.employee_visited_id = visited
+            form = VMS_PlanningForm().save(commit=False)
+            form.vms_vms_employee_qualified_id = user
+            form.vms_vms_employee_visited_id = visited
             form.month = month
             form.year = year
             form.save()
@@ -566,4 +554,66 @@ def create_vms_planning(request):
         return redirect('vms-planning')
         
     return render(request,'configuration/planning/vms/vms_planning_date.html')
+
+
+# VMQ PLANNING
+
+def vmq_planning(request):
+    vmq_planning = VMQ_Planning.objects.all().order_by('-year')
+    return render(request,'configuration/planning/vmq/vmq_planning.html',{'vmq_planning':vmq_planning})
+
+
+def create_vmq_planning(request):
+
+    if request.method == 'POST':
+
+        # GET PLANNING DATES
+        month = request.POST.get('month')
+        year = request.POST.get('year')
+
+        # delete previous planning one the same period
+        VMQ_Planning.objects.filter(month=month,year=year).delete()
+
+        # GET employees QUALIFIED - All
+
+        qualified_employee = dict(list(Qualification.objects.filter(vmq_qualification=True).values_list('employee','employee__job_bulletin')))
+        count_qualified = len(qualified_employee)
+
+        # GET employees already VISITED
+        visited_matricule = list(VMQ_Planning.objects.filter(closed=True).values_list('vmq_employee_visited', flat=True))
+
+        # GET employees NOT VISITED
+        employee_not_visited = Employee.objects.exclude(matricule__in=visited_matricule).values_list('matricule','resp_matricule_n1')
+        count_not_visited = len(employee_not_visited)
+
+        job_qualified = ["Responsable Fabrication","Chef d'équipe"]
+
+        if count_not_visited >= count_qualified : 
+            employee_not_visited = dict(list(employee_not_visited))
+        else : 
+            employees_loop = Employee.objects.values_list('matricule','resp_matricule_n1') # they become 'not visited'
+            employee_not_visited = dict(list((employee_not_visited | employees_loop)))
+
+        for matricule,job in qualified_employee.items() :
+            for matricule_to_visit,resp_n1 in employee_not_visited.items() :
+                form = VMQ_PlanningForm().save(commit=False)
+                form.month = month
+                form.year = year
+                if job in job_qualified :
+                    if matricule == resp_n1 :
+                        form.vmq_employee_qualified_id = matricule
+                        form.vmq_employee_visited_id = matricule_to_visit
+                        form.save()
+                        break
+                else : 
+                    form.vmq_employee_qualified_id = matricule
+                    form.vmq_employee_visited_id = matricule_to_visit
+                    form.save()
+                    break
+            del employee_not_visited[matricule_to_visit]
+
+        return redirect('vmq-planning')
+        
+    return render(request,'configuration/planning/vmq/vmq_planning_date.html')
+
 
