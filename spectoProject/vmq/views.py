@@ -180,25 +180,25 @@ def create_vmq(request):
         vmq_form = VmqForm(request.POST)
 
         if vmq_form.is_valid():
+            try :
+                # SAVE PARENT
+                vmq_form.save()
 
-            # SAVE PARENT
-            vmq_form.save()
-
-            # CHILDS - VMQ_Item - ManyToMany  
-            for i in range(len(item_ids)) : 
-                VmqItem.objects.create( item = Item.objects.get(id=item_ids[i]),
-                                        vmq = Vmq.objects.get(id = vmq_form.instance.id),
-                                        result = results[i],
-                                        type = types[i],
-                                        comment = comments[i],
-                                        action = actions[i],
-                                        )
-            try : 
-                planning_to_close = VMQ_Planning.objects.filter(vmq_employee_visited_id = vmq_form.instance.employee.matricule).latest('created_at')
+                # CHILDS - VMQ_Item - ManyToMany  
+                for i in range(len(item_ids)) : 
+                    VmqItem.objects.create( item = Item.objects.get(id=item_ids[i]),
+                                            vmq = Vmq.objects.get(id = vmq_form.instance.id),
+                                            result = results[i],
+                                            type = types[i],
+                                            comment = comments[i],
+                                            action = actions[i],
+                                            )
+                
+                planning_to_close = VMQ_Planning.objects.filter(vmq_employee_visited_id = vmq_form.instance.employee.matricule, closed = False).latest('created_at')
                 planning_to_close.closed = True
                 planning_to_close.save()
                 return redirect('vmq')
-            except : messages.error(request, "The corresponding VMQ Planning for the visited employee doesn't exist")
+            except : messages.error(request, "Employee already visited or corresponding VMQ Planning inexistent")
         else : messages.error(request, 'An error occurred while creating the VMQ')
 
     else : vmq_form = VmqForm()

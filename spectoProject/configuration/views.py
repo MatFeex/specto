@@ -386,7 +386,7 @@ def upload_employee(request):
                             )
                     return redirect('employee')
 
-                except : messages.error(request, 'File not valid : it must contain at least 16 columns')
+                except : messages.error(request, 'File not valid : it must contain at least 16 columns.')
             
             else : messages.error(request, 'The path file is unreachable')
 
@@ -577,6 +577,7 @@ def create_vmq_planning(request):
         # GET employees QUALIFIED - All
 
         qualified_employee = dict(list(Qualification.objects.filter(vmq_qualification=True).values_list('employee','employee__job_bulletin')))
+        job_qualified = ["Responsable Fabrication","Chef d'équipe"]
         count_qualified = len(qualified_employee)
 
         # GET employees already VISITED
@@ -585,8 +586,6 @@ def create_vmq_planning(request):
         # GET employees NOT VISITED
         employee_not_visited = Employee.objects.exclude(matricule__in=visited_matricule).values_list('matricule','resp_matricule_n1')
         count_not_visited = len(employee_not_visited)
-
-        job_qualified = ["Responsable Fabrication","Chef d'équipe"]
 
         if count_not_visited >= count_qualified : 
             employee_not_visited = dict(list(employee_not_visited))
