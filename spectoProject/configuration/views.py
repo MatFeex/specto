@@ -559,7 +559,7 @@ def create_vms_planning(request):
 # VMQ PLANNING
 
 def vmq_planning(request):
-    vmq_planning = VMQ_Planning.objects.all().order_by('-year')
+    vmq_planning = VMQ_Planning.objects.all().order_by('-year','-created_at',)
     return render(request,'configuration/planning/vmq/vmq_planning.html',{'vmq_planning':vmq_planning})
 
 
@@ -577,6 +577,7 @@ def create_vmq_planning(request):
         # GET employees QUALIFIED - All
 
         qualified_employee = dict(list(Qualification.objects.filter(vmq_qualification=True).values_list('employee','employee__job_bulletin')))
+        qualified_matricule = list(qualified_employee.keys())
         job_qualified = ["Responsable Fabrication","Chef d'équipe"]
         count_qualified = len(qualified_employee)
 
@@ -584,32 +585,49 @@ def create_vmq_planning(request):
         visited_matricule = list(VMQ_Planning.objects.filter(closed=True).values_list('vmq_employee_visited', flat=True))
 
         # GET employees NOT VISITED
-        employee_not_visited = Employee.objects.exclude(matricule__in=visited_matricule).values_list('matricule','resp_matricule_n1')
+        employee_not_visited = Employee.objects.exclude(matricule__in=visited_matricule+qualified_matricule).values_list('matricule','resp_matricule_n1')
         count_not_visited = len(employee_not_visited)
 
         if count_not_visited >= count_qualified : 
+            print('delta : ',count_not_visited-count_qualified)
             employee_not_visited = dict(list(employee_not_visited))
         else : 
+            print('LOOP, delta : ', count_not_visited-count_qualified)
             employees_loop = Employee.objects.values_list('matricule','resp_matricule_n1') # they become 'not visited'
-            employee_not_visited = dict(list((employee_not_visited | employees_loop)))
+            employee_not_visited = dict(list((employee_not_visited | employees_loop)))# [:delta]?
+            # pas forcément pris en compte si rajout de tous les employers et pas que le delta manquant vu les conditions de for loop
 
+        print(employee_not_visited)
         for matricule,job in qualified_employee.items() :
             for matricule_to_visit,resp_n1 in employee_not_visited.items() :
+                
                 form = VMQ_PlanningForm().save(commit=False)
                 form.month = month
                 form.year = year
-                if job in job_qualified :
-                    if matricule == resp_n1 :
-                        form.vmq_employee_qualified_id = matricule
+                if job in job_qualified:
+                    # print('----- job qualified if ----')
+                    # print('matricule : ',matricule)
+                    # print('job : ', job)
+                    # print('resp_n1 : ', resp_n1)
+                    if matricule == resp_n1 : 
+
+                        form.vmq_employee_qualified_id = matricule  
                         form.vmq_employee_visited_id = matricule_to_visit
                         form.save()
+                        del employee_not_visited[matricule_to_visit]
+                        print(matricule)
+                        print(matricule_to_visit)
                         break
+                    # ELSE ??
                 else : 
+                    print('else')
                     form.vmq_employee_qualified_id = matricule
                     form.vmq_employee_visited_id = matricule_to_visit
                     form.save()
+                    del employee_not_visited[matricule_to_visit]
+                    print(matricule)
+                    print(matricule_to_visit)
                     break
-            del employee_not_visited[matricule_to_visit]
 
         return redirect('vmq-planning')
         
