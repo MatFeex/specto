@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect
 from .models import Division, Employee, Program, Product, VMS_Planning, Workshop, Qualification, VMQ_Planning
 from vms.models import Vms
 
-from .forms import DivisionForm, EmployeeFileForm, EmployeeForm, ProgramForm, ProductForm, VMQ_PlanningForm, WorkshopForm, QualificationForm, VMS_PlanningForm
+from .forms import DivisionForm, EmployeeFileForm, EmployeeForm, ProgramForm, ProductForm, VMQ_PlanningForm, WorkshopForm, QualificationForm, VMS_PlanningForm, VMQ_PlanningForm_Custom
 from django.contrib import messages
 from django.db.models import Q
 
 import os
 import pandas as pd
 from itertools import cycle
+import math
 
 # SPECTO VIEWS - CONFIGURATION :
 
@@ -241,7 +242,6 @@ def create_workshop(request, division_id, program_id, product_id):
 
 def update_workshop(request,division_id, program_id, product_id, workshop_id):
     workshop = Workshop.objects.get(id=workshop_id)
-    print(workshop_id)
     form = WorkshopForm(instance=workshop)
     if request.method == 'POST' :
         form = WorkshopForm(request.POST, instance=workshop)
@@ -290,103 +290,101 @@ def upload_employee(request):
     if request.method == 'POST':
         form = EmployeeFileForm(request.POST, request.FILES) 
         if form.is_valid(): 
-
+            # DELETE PREVIOUS UPLOADED FILE
+            for file in os.listdir("configuration/handle_uploaded_file") : os.remove(f'configuration/handle_uploaded_file/{file}')
+            # keep an uploaded files history in EmployeeFile Model
+            form.save() 
             # PATH OF NEW UPLOADED FILE 
             file_path = os.getcwd().replace("\\",'/') + '/configuration/handle_uploaded_file/' + os.listdir("configuration/handle_uploaded_file")[0]
 
             if os.path.isfile(file_path) : 
-                try: 
-                    # DELETE PREVIOUS UPLOADED FILE
-                    for file in os.listdir("configuration/handle_uploaded_file") : os.remove(f'configuration/handle_uploaded_file/{file}')
+                #try: 
+
+
+                # DATA PROCESSING
+                data = pd.read_excel(file_path) # read the new uploaded file
                 
-                    form.save() # keep an uploaded files history in EmployeeFile Model
+                # get objects
+                programs = Program.objects.values('name','id')
+                products = Product.objects.values('name','id')
+                workshops = Workshop.objects.values('name','id')
+                # obj to df
+                df_programs = pd.DataFrame(list(programs))
+                df_products = pd.DataFrame(list(products))
+                df_workshop = pd.DataFrame(list(workshops))
+                
+                # df to dict
+                dict_programs, dict_products, dict_workshop = [],[],[]
+                try :
+                    dict_programs = dict(zip(df_programs.name,df_programs.id))
+                    dict_products = dict(zip(df_products.name,df_products.id))
+                    dict_workshop = dict(zip(df_workshop.name,df_workshop.id))
+                except : messages.error(request, 'Default values will be given for missing information about programs, products and workshops')
+                
+                # mapping
+                program_id = data['Affaire'].map(dict_programs)
+                product_id = data['Produit'].map(dict_products)
+                workshop_id = data['Phase'].map(dict_workshop)
 
-                    # DATA PROCESSING
-                    data = pd.read_excel(file_path) # read the new uploaded file
-                    
-                    # get objects
-                    programs = Program.objects.values('name','id')
-                    products = Product.objects.values('name','id')
-                    workshops = Workshop.objects.values('name','id')
+                # give default ID if cannot map
+                program_id = [Program.objects.filter(name='NA').first().id if math.isnan(float(idd)) else idd for idd in program_id]
+                product_id = [Product.objects.filter(name='NA').first().id if math.isnan(float(idd)) else idd for idd in product_id]
+                workshop_id = [Workshop.objects.filter(name='NA').first().id if math.isnan(float(idd)) else idd for idd in workshop_id]
 
-                    # obj to df
-                    df_programs = pd.DataFrame(list(programs))
-                    df_products = pd.DataFrame(list(products))
-                    df_workshop = pd.DataFrame(list(workshops))
-                    
-                    # df to dict
-                    dict_programs, dict_products, dict_workshop = [],[],[]
-                    try :
-                        dict_programs = dict(zip(df_programs.name,df_programs.id))
-                        dict_products = dict(zip(df_products.name,df_products.id))
-                        dict_workshop = dict(zip(df_workshop.name,df_workshop.id))
-                    except : messages.error(request, 'Default values will be given for missing information about programs, products and workshops')
+                # delete useless columns
+                data = data.drop(columns=['Affaire', 'Produit','Phase'])
 
-                    # mapping
-                    program_id = data['Affaire'].map(dict_programs).values[0] if dict_programs else 'nan'
-                    product_id = data['Produit'].map(dict_products).values[0] if dict_products else 'nan'
-                    workshop_id = data['Phase'].map(dict_workshop).values[0] if dict_workshop else 'nan'
+                data.insert(13,'division_id',1) # add DIVISION column that doesn't exist in the file
+                data.insert(14,'program_id',program_id)
+                data.insert(15,'product_id',product_id)
+                data.insert(16,'workshop_id',workshop_id)
 
-                    # give default ID if cannot map
-                    program_id = int(str(program_id).replace('nan','1'))
-                    product_id = int(str(product_id).replace('nan','1'))
-                    workshop_id = int(str(workshop_id).replace('nan','1'))
+                for i in range(len(data)):
+                    matricule = data.loc[i,'Mat']
+                    employee = Employee.objects.filter(matricule=matricule).first()
+                    if employee : 
+                        employee_form = EmployeeForm(instance=employee).save(commit=False)                
+                        employee_form.matricule = data.iloc[i,0]
+                        employee_form.names = data.iloc[i,1]
+                        employee_form.i_p = data.iloc[i,2]
+                        employee_form.code = data.iloc[i,3]
+                        employee_form.department = data.iloc[i,4]
+                        employee_form.wording = data.iloc[i,5]
+                        employee_form.cost_center = data.iloc[i,6]
+                        employee_form.job_bulletin = data.iloc[i,7]
+                        employee_form.resp_matricule_n1 = data.iloc[i,8]
+                        employee_form.resp_names_n1 = data.iloc[i,9]
+                        employee_form.resp_matricule_n2 = data.iloc[i,10]
+                        employee_form.resp_names_n2 = data.iloc[i,11]
+                        employee_form.staff_tab_afs = data.iloc[i,12]
+                        employee_form.division_id = data.iloc[i,13]
+                        employee_form.program_id = data.iloc[i,14]
+                        employee_form.product_id = data.iloc[i,15]
+                        employee_form.workshop_id = data.iloc[i,16]
+                        employee_form.save()
+                    else:
+                        Employee.objects.create(
+                            matricule = data.iloc[i,0],
+                            names = data.iloc[i,1],
+                            i_p = data.iloc[i,2],
+                            code = data.iloc[i,3],
+                            department = data.iloc[i,4],
+                            wording = data.iloc[i,5],
+                            cost_center = data.iloc[i,6],
+                            job_bulletin = data.iloc[i,7],
+                            resp_matricule_n1 = data.iloc[i,8],
+                            resp_names_n1 = data.iloc[i,9],
+                            resp_matricule_n2 = data.iloc[i,10],
+                            resp_names_n2 = data.iloc[i,11],
+                            staff_tab_afs = data.iloc[i,12],
+                            division_id = data.iloc[i,13],
+                            program_id = data.iloc[i,14],
+                            product_id = data.iloc[i,15],
+                            workshop_id = data.iloc[i,16],
+                        )
+                return redirect('employee')
 
-                    # delete useless columns
-                    data = data.drop(columns=['Affaire', 'Produit','Phase'])
-
-                    data.insert(13,'division_id',1) # add DIVISION column that doesn't exist in the file
-                    data.insert(14,'program_id',program_id)
-                    data.insert(15,'product_id',product_id)
-                    data.insert(16,'workshop_id',workshop_id)
-                    
-                    print(data)
-                    for i in range(len(data)):
-                        matricule = data.loc[i,'Mat']
-                        employee = Employee.objects.filter(matricule=matricule).first()
-                        if employee : 
-                            employee_form = EmployeeForm(instance=employee).save(commit=False)                
-                            employee_form.matricule = data.iloc[i,0]
-                            employee_form.names = data.iloc[i,1]
-                            employee_form.i_p = data.iloc[i,2]
-                            employee_form.code = data.iloc[i,3]
-                            employee_form.department = data.iloc[i,4]
-                            employee_form.wording = data.iloc[i,5]
-                            employee_form.cost_center = data.iloc[i,6]
-                            employee_form.job_bulletin = data.iloc[i,7]
-                            employee_form.resp_matricule_n1 = data.iloc[i,8]
-                            employee_form.resp_names_n1 = data.iloc[i,9]
-                            employee_form.resp_matricule_n2 = data.iloc[i,10]
-                            employee_form.resp_names_n2 = data.iloc[i,11]
-                            employee_form.staff_tab_afs = data.iloc[i,12]
-                            employee_form.division_id = data.iloc[i,13]
-                            employee_form.program_id = data.iloc[i,14]
-                            employee_form.product_id = data.iloc[i,15]
-                            employee_form.workshop_id = data.iloc[i,16]
-                            employee_form.save()
-                        else:
-                            Employee.objects.create(
-                                matricule = data.iloc[i,0],
-                                names = data.iloc[i,1],
-                                i_p = data.iloc[i,2],
-                                code = data.iloc[i,3],
-                                department = data.iloc[i,4],
-                                wording = data.iloc[i,5],
-                                cost_center = data.iloc[i,6],
-                                job_bulletin = data.iloc[i,7],
-                                resp_matricule_n1 = data.iloc[i,8],
-                                resp_names_n1 = data.iloc[i,9],
-                                resp_matricule_n2 = data.iloc[i,10],
-                                resp_names_n2 = data.iloc[i,11],
-                                staff_tab_afs = data.iloc[i,12],
-                                division_id = data.iloc[i,13],
-                                program_id = data.iloc[i,14],
-                                product_id = data.iloc[i,15],
-                                workshop_id = data.iloc[i,16],
-                            )
-                    return redirect('employee')
-
-                except : messages.error(request, 'File not valid : it must contain at least 16 columns.')
+                #except : messages.error(request, 'File not valid : it must contain at least 16 columns.')
             
             else : messages.error(request, 'The path file is unreachable')
 
@@ -558,10 +556,37 @@ def create_vms_planning(request):
 
 # VMQ PLANNING
 
-def vmq_planning(request):
-    vmq_planning = VMQ_Planning.objects.all().order_by('-year','-created_at',)
+def vmq_planning_list(request):
+    vmq_plannings = []
+    vmq_planning_all = VMQ_Planning.objects.all()
+    months_years = list(set(vmq_planning_all.values_list('month','year')))
+    for i in range(len(months_years)):
+        vmq_plannings.append(vmq_planning_all.filter(month=months_years[i][0],year=months_years[i][1]))
+    return render(request,'configuration/planning/vmq/vmq_planning_list.html',{'vmq_plannings':vmq_plannings})
+
+def vmq_planning(request, month, year):
+    vmq_planning = VMQ_Planning.objects.filter(month=month,year=year).order_by('-created_at',)
+    if request.method == 'POST': 
+        print(request.POST.get('row_to_remove'))
+        VMQ_Planning.objects.filter(id = request.POST.get('row_to_remove')).delete()
+        return render(request,'configuration/planning/vmq/vmq_planning.html',{'vmq_planning':vmq_planning})
     return render(request,'configuration/planning/vmq/vmq_planning.html',{'vmq_planning':vmq_planning})
 
+def create_row_vmq_planning(request,month,year):
+    if request.method == 'POST' :
+        form = VMQ_PlanningForm_Custom(request.POST)
+        if form.is_valid(): 
+            form.month = month
+            form.year = year
+            f = form.save(commit=False)
+            f.month = month
+            f.year = year
+            f.save()
+            return redirect(f'/configuration/planning/vmq-planning/{month}/{year}/planning/')
+        else : messages.error(request, 'An error occurred while adding the row in the specific VMQ Planning')
+    else : form = VMQ_PlanningForm_Custom()
+    context = {'form':form, 'text': f'VMQ PLANNING - add a row - {month} {year}'}
+    return render(request, 'configuration/form.html', context)
 
 def create_vmq_planning(request):
 
@@ -585,19 +610,16 @@ def create_vmq_planning(request):
         visited_matricule = list(VMQ_Planning.objects.filter(closed=True).values_list('vmq_employee_visited', flat=True))
 
         # GET employees NOT VISITED
-        employee_not_visited = Employee.objects.exclude(matricule__in=visited_matricule+qualified_matricule).values_list('matricule','resp_matricule_n1')
+        job_visited = ['Manoeuvre spécialisé(e)','Contrôleur (se)']
+        employee_not_visited = Employee.objects.filter(job_bulletin__in=job_visited).exclude(matricule__in=visited_matricule+qualified_matricule).values_list('matricule','resp_matricule_n1')
         count_not_visited = len(employee_not_visited)
 
         if count_not_visited >= count_qualified : 
-            print('delta : ',count_not_visited-count_qualified)
             employee_not_visited = dict(list(employee_not_visited))
         else : 
-            print('LOOP, delta : ', count_not_visited-count_qualified)
             employees_loop = Employee.objects.values_list('matricule','resp_matricule_n1') # they become 'not visited'
             employee_not_visited = dict(list((employee_not_visited | employees_loop)))# [:delta]?
-            # pas forcément pris en compte si rajout de tous les employers et pas que le delta manquant vu les conditions de for loop
 
-        print(employee_not_visited)
         for matricule,job in qualified_employee.items() :
             for matricule_to_visit,resp_n1 in employee_not_visited.items() :
                 
@@ -605,32 +627,88 @@ def create_vmq_planning(request):
                 form.month = month
                 form.year = year
                 if job in job_qualified:
-                    # print('----- job qualified if ----')
-                    # print('matricule : ',matricule)
-                    # print('job : ', job)
-                    # print('resp_n1 : ', resp_n1)
                     if matricule == resp_n1 : 
-
                         form.vmq_employee_qualified_id = matricule  
                         form.vmq_employee_visited_id = matricule_to_visit
                         form.save()
                         del employee_not_visited[matricule_to_visit]
-                        print(matricule)
-                        print(matricule_to_visit)
                         break
-                    # ELSE ??
                 else : 
-                    print('else')
                     form.vmq_employee_qualified_id = matricule
                     form.vmq_employee_visited_id = matricule_to_visit
                     form.save()
                     del employee_not_visited[matricule_to_visit]
-                    print(matricule)
-                    print(matricule_to_visit)
                     break
 
-        return redirect('vmq-planning')
+        return redirect('vmq-planning-list')
         
     return render(request,'configuration/planning/vmq/vmq_planning_date.html')
 
 
+# vmq_qualified = [
+#     81371,
+#     82206,
+#     80197,
+#     80608,
+#     81301,
+#     81996,
+#     81951,
+#     81997,
+#     80111,
+#     81360,
+#     80124,
+#     80319,
+#     80363,
+#     80378,
+#     80421,
+#     80640,
+#     80687,
+#     81144,
+#     82063,
+#     82309,
+#     81200,
+#     80062,
+#     80968,
+#     81846,
+#     81851,
+#     82162,
+#     82307,
+#     80036,
+#     80706,
+#     80289,
+#     80655,
+#     80040,
+#     81934,
+#     81201,
+#     82061,
+#     82275,
+#     80143,
+#     82058,
+#     82065,
+#     82164,
+#     82264,
+#     80109,
+#     82213,
+#     82166,
+#     80688,
+#     81486,
+#     81802,
+#     81835,
+#     81932,
+#     82163,
+#     80807,
+#     80352,
+#     82204,
+#     82205,
+#     82322,
+#     81179,
+#     80906,
+#     82305,
+# ]
+# for mat in vmq_qualified :
+#     form = QualificationForm().save(commit=False)
+#     form.employee_id = mat
+#     form.vms_qualification = False
+#     form.vmq_qualification = True
+#     form.fives_qualification = False
+#     form.save()

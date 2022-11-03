@@ -5,9 +5,18 @@
 {% block content %}
 
 <div class="col-lg-6 mb-lg-0 mb-4 offset-2"  style="width: 90%; margin: auto;"> 
+    <style>
+        .first-btn{
+            margin-left: 1em;
+            margin-bottom: 1em;
+        }
+    </style>
+    <div class="first-btn">
+        <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'vmq-planning-list' %}">BACK</a>
+    </div>    
     <div class="card z-index-2 ">
         <div class="card-header pb-0">
-        <h6>VMQ PLANNING</h6>
+        <h6>VMQ PLANNING - {{vmq_planning.0.month}} {{vmq_planning.0.year}} </h6>
         <hr>
         </div>
         <div class="card-body px-0 pt-0 pb-2">
@@ -35,7 +44,7 @@
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Product</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Workshop</th>
                                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Closed</th>
-                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -68,18 +77,25 @@
                                             <td class="align-middle text-center" style="border-left : 1px solid #adadad62">
                                                 <span class="text-secondary text-xs font-weight-bold">{{row.closed}}</span>
                                             </td>
-                                            <td class="align-middle text-center">
-                                                <span class="text-secondary text-xs font-weight-bold">{{row.month}} {{row.year}}</span>
+                                            <td class="align-middle text-center" style="border-left : 1px solid #adadad62">
+                                                <form action="" method="POST">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="row_to_remove" value="{{row.id}}">
+                                                    <button type="submit" value="Submit" style="border: none; background: transparent;"><i class="fa-solid fa-trash-can" style="color:#E64848;"></i></button>
+                                                </form>
                                             </td>
                                         </tr>
                                     {% endfor %}     
                                 </tbody>
                             </table>
+                            <center>
+                                <a href="{% url 'create-row-vmq-planning' vmq_planning.0.month vmq_planning.0.year %}" style="font-size: 2em; color:#d135bc;"><i class="fa-solid fa-plus"></i></a>
+                            </center>
                         </div>
                     </div>
                   </div>
                 <center><div>
-                    <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'vmq-planning' %}">BACK</a>
+                    <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'vmq-planning' vmq_planning.0.month vmq_planning.0.year %}">BACK</a>
                 </div></center>
         </div>
     </div>

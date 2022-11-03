@@ -1,0 +1,64 @@
+{% extends 'main.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="col-lg-6 mb-lg-0 mb-4 offset-2"  style="width: 90%; margin: auto;"> 
+    <div class="card z-index-2 ">
+        <div class="card-header pb-0">
+        <h6>ALL VMQ PLANNINGS</h6>
+        <hr>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+
+                <div class="form-vmq_planning">
+
+                    <div class="form-group">
+                        <style>
+                            .table-responsive h5{
+                                width: 95%;
+                                padding: .3em;
+                                font-size: 1em;
+                            }
+                        </style>
+                        <div class="table-responsive p-0">
+                            <table style="width: 95%;" class="table bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Visits</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Generated at</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for vmq_planning in vmq_plannings %}
+                                        <tr>
+                                            <td class="align-middle text-center">
+                                                <span class="text-secondary text-xs font-weight-bold">{{vmq_planning.0.month}} {{vmq_planning.0.year}}</span>
+                                            </td>
+                                            <td class="align-middle text-center" style="border-left : 1px solid #adadad62">
+                                                <span class="text-secondary text-xs font-weight-bold">{{vmq_planning.count}}</span>
+                                            </td>
+                                            <td class="align-middle text-center" style="border-left : 1px solid #adadad62">
+                                                <span class="text-secondary text-xs font-weight-bold">{{vmq_planning.0.created_at}}</span>
+                                            </td>
+                                            <td class="align-middle text-center" style="border-left : 1px solid #adadad62">
+                                                <a class="btn btn-outline-secondary btn-sm" style="margin: 0;" href="{% url 'vmq-planning' vmq_planning.0.month vmq_planning.0.year %}" role="button">Details</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}     
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                  </div>
+                <center><div>
+                    <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'vmq-planning-list' %}">BACK</a>
+                </div></center>
+        </div>
+    </div>
+</div>
+
+{% endblock content%}

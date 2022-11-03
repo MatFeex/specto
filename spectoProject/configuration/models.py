@@ -59,9 +59,9 @@ class SoftDeleteModel(models.Model):
 
 class Division(BaseModel,SoftDeleteModel):
 
-    name = models.CharField(max_length=30, default="Division name")
-    location = models.CharField(max_length=30,default="Tunis")
-    description = models.CharField(max_length=200,default="Division description")
+    name = models.CharField(max_length=30)
+    location = models.CharField(max_length=30)
+    description = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name
@@ -69,8 +69,8 @@ class Division(BaseModel,SoftDeleteModel):
 
 class Program(BaseModel,SoftDeleteModel):
     division = models.ForeignKey(Division, on_delete=models.CASCADE)
-    name = models.CharField(max_length=30, default="Program name")
-    description = models.CharField(max_length=200,default="Program description")
+    name = models.CharField(max_length=200)
+    description = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name
@@ -78,8 +78,8 @@ class Program(BaseModel,SoftDeleteModel):
 
 class Product(BaseModel,SoftDeleteModel):
     program = models.ForeignKey(Program, on_delete=models.CASCADE)
-    name = models.CharField(max_length=30, default="Product name")
-    description = models.CharField(max_length=200,default="Product description")
+    name = models.CharField(max_length=30)
+    description = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name
@@ -87,8 +87,8 @@ class Product(BaseModel,SoftDeleteModel):
 
 class Workshop(BaseModel,SoftDeleteModel):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    name = models.CharField(max_length=30, default="Workshop name")
-    description = models.CharField(max_length=200,default="Workshop description")
+    name = models.CharField(max_length=30)
+    description = models.CharField(max_length=200)
 
     def __str__(self):
         return self.name
@@ -120,7 +120,7 @@ class Employee(models.Model): # does not inherit from BaseModel/SoftDeleteModel 
     division = models.ForeignKey(Division,on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.names)
+        return self.names
 
 
 class Qualification(BaseModel,SoftDeleteModel):
