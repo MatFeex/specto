@@ -750,7 +750,9 @@ progress {
 .row>* {
   flex-shrink: 0;
   width: 100%;
-  max-width: 100%;
+  /* max-width: 100%; */
+  max-width: 96%;
+  margin-left: 2%;
   padding-right: calc(var(--bs-gutter-x) * .5);
   padding-left: calc(var(--bs-gutter-x) * .5);
   margin-top: var(--bs-gutter-y);
@@ -11053,7 +11055,8 @@ fieldset:disabled .btn {
 }
 
 .min-height-150 {
-  min-height: 150px !important;
+  /* min-height: 150px !important; */
+  min-height: 90px !important;
 }
 
 .min-height-160 {
@@ -22523,7 +22526,7 @@ hr.horizontal.gray-light {
 .navbar-vertical.navbar-expand-xs .navbar-collapse {
   display: block;
   overflow: auto;
-  height: calc(100vh - 360px);
+  /* height: calc(100vh - 360px); */
 }
 
 .navbar-vertical.navbar-expand-xs>[class*="container"] {

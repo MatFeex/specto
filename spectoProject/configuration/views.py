@@ -558,7 +558,7 @@ def create_vms_planning(request):
 
 def vmq_planning_list(request):
     vmq_plannings = []
-    vmq_planning_all = VMQ_Planning.objects.all()
+    vmq_planning_all = VMQ_Planning.objects.all().order_by('-created_at',)
     months_years = list(set(vmq_planning_all.values_list('month','year')))
     for i in range(len(months_years)):
         vmq_plannings.append(vmq_planning_all.filter(month=months_years[i][0],year=months_years[i][1]))
