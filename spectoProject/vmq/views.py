@@ -294,14 +294,18 @@ def vmq_kpi(request):
             return redirect('vmq-kpi')
         return render(request,'vmq/vmq-kpi/vmq_kpi.html',{'select_dates':True, 'date_start':date_start, 'date_stop':date_stop})
 
-    vmqs_kpi = VmqItem.objects.filter(vmq__created_at__range = (date_start,date_stop), action__isnull=False)
+    vmqs_kpi = VmqItem.objects.filter(vmq__created_at__range = (date_start,date_stop)).exclude(action='')
     item_action_list = [i.item for i in vmqs_kpi]
     themes_action_list = [i.item.theme for i in vmqs_kpi]
 
-    vmq_kpi_item = {i:item_action_list.count(i) for i in item_action_list}
-    vmq_kpi_theme = {i:themes_action_list.count(i) for i in themes_action_list}
-
-    context = {'vmqs_kpi':vmqs_kpi,'date_start':date_start, 'date_stop':date_stop,'vmq_kpi_item':vmq_kpi_item,'vmq_kpi_theme':vmq_kpi_theme}
+    vmq_kpi_item = {i.name:item_action_list.count(i) for i in item_action_list}
+    vmq_kpi_theme = {i.name:themes_action_list.count(i) for i in themes_action_list}
+    print(list(vmq_kpi_theme.keys()))
+    context = {
+        'vmqs_kpi':vmqs_kpi,'date_start':date_start, 'date_stop':date_stop,'vmq_kpi_item':vmq_kpi_item,
+        'vmq_kpi_theme':vmq_kpi_theme,'themeLabels':list(vmq_kpi_theme.keys()),'themeData':list(vmq_kpi_theme.values()),
+        'itemLabels':list(vmq_kpi_item.keys()),'itemData':list(vmq_kpi_item.values())
+        }
     return render(request,'vmq/vmq-kpi/vmq_kpi.html',context)
 
 
