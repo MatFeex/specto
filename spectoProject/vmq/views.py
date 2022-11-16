@@ -4,6 +4,8 @@ from configuration.models import VMQ_Planning
 from .forms import ThemeForm, ItemForm, VmqForm
 from django.contrib import messages
 from django.db.models import Q
+from datetime import datetime
+import pytz
 
 # SPECTO VIEWS : VMQ
 
@@ -266,9 +268,40 @@ def delete_vmq(request,vmq_id):
 
 
 def restore_vmq(request,vmq_id):
+
     vmq = Vmq.deleted_objects.get(id=vmq_id)
     if request.method == 'POST' :
         vmq.restore()
         return redirect('vmq')
     context = {'obj':vmq}
     return render(request,'vmq/restore.html',context)
+
+
+# VMQ KPI
+
+def vmq_kpi(request):
+
+    date_start = request.session.get('date_start')
+    date_stop = request.session.get('date_stop')
+    if not date_start and not date_stop :
+        date_stop = datetime.now().date
+        date_start = date_stop.replace(day=1).date
+
+    if request.GET.get('select-dates') == 'select-dates':
+        if request.method == 'POST':
+            request.session['date_start'] = request.POST.get('date_start')
+            request.session['date_stop'] = request.POST.get('date_stop')
+            return redirect('vmq-kpi')
+        return render(request,'vmq/vmq-kpi/vmq_kpi.html',{'select_dates':True, 'date_start':date_start, 'date_stop':date_stop})
+
+    vmqs_kpi = VmqItem.objects.filter(vmq__created_at__range = (date_start,date_stop), action__isnull=False)
+    item_action_list = [i.item for i in vmqs_kpi]
+    themes_action_list = [i.item.theme for i in vmqs_kpi]
+
+    vmq_kpi_item = {i:item_action_list.count(i) for i in item_action_list}
+    vmq_kpi_theme = {i:themes_action_list.count(i) for i in themes_action_list}
+
+    context = {'vmqs_kpi':vmqs_kpi,'date_start':date_start, 'date_stop':date_stop,'vmq_kpi_item':vmq_kpi_item,'vmq_kpi_theme':vmq_kpi_theme}
+    return render(request,'vmq/vmq-kpi/vmq_kpi.html',context)
+
+

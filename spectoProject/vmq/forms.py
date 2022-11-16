@@ -25,11 +25,9 @@ class VmqForm(ModelForm):
             'employee': 'Visited',
         }
 
-
 class VmqItemForm(ModelForm):
     class Meta:
         model= VmqItem
         fields = ['result','type','comment']
-
 
 

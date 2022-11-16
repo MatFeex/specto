@@ -1,0 +1,136 @@
+{% extends 'main.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+{% if not select_dates %}
+<div class="col-lg-6 mb-lg-0 mb-4 offset-2"  style="width: 90%; margin: auto;"> 
+    <div class="card z-index-2 ">
+        <div class="card-header pb-0">
+        <h6><i class="fa-regular fa-calendar-check"></i> {{date_start}} - <i class="fa-regular fa-calendar-xmark"></i> {{date_stop}}</h6>
+        <hr>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+                <style>
+                    .form-row{
+                        display: flex;
+                        margin: 1.5em;
+                    }
+                    .form-group{
+                        margin-left: .5em;
+                        width: 100%;
+                    }
+                    .form-group textarea,
+                    .form-group h5{
+                        background: transparent;
+                        border: 1px solid #bcb9b9;
+                        padding: .5rem;
+                        border-radius: 10px;
+                        width: 100%;
+                        font-weight: 500;
+                        outline: none;
+                        margin-bottom: 1em;
+                        font-size: 1em;
+                    }
+                    .form-group h6{
+                        font-size: .8em;
+                        margin-left: .2em;
+                    }
+                </style>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                        <style>
+                            .table-responsive h5{
+                                width: 95%;
+                                padding: .3em;
+                            }
+                        </style>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr;">
+                            <div class="table-responsive p-0">
+                                <table style="width: 95%;" class="table bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">VMQ ITEMS</th>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Mentioned Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            {% for item,count in vmq_kpi_item.items %}
+                                            <tr>
+                                                <td>
+                                                    <center><h6><span class="text-secondary text-xs font-weight-bold">{{item}}</span></h6></center>
+                                                </td>
+                                                <td>
+                                                    <center><h6><span class="text-secondary text-xs font-weight-bold">{{count}}</span></h6></center>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}                               
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive p-0">
+                                <table style="width: 95%;" class="table bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">VMQ THEME</th>
+                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Mentioned Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for theme,count in vmq_kpi_theme.items %}
+                                        <tr>
+                                            <td>
+                                                <center><h6><span class="text-secondary text-xs font-weight-bold">{{theme}}</span></h6></center>
+                                            </td>
+                                            <td>
+                                                <center><h6><span class="text-secondary text-xs font-weight-bold">{{count}}</span></h6></center>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}                             
+                                    </tbody>
+                                </table>
+                            </div> 
+                        </div>
+
+                    </div>
+                  </div>
+                <center><div>
+                    <a class ="btn btn-outline-primary btn-sm mb-0 me-3" onclick="history.back()">BACK</a>
+                </div></center>
+        </div>
+    </div>
+</div>
+{% else %}
+
+<div class="col-lg-6 mb-lg-0 mb-4 offset-2"> 
+    <div class="card z-index-2 " height="10">
+        <div class="card-header pb-0">
+        <h6>{{text}}</h6>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2" style="margin: 2em;">
+            <form action="" method='POST'>  
+                {% csrf_token %}
+                <label class=" requiredField">
+                    Date Start<span class="asteriskField">*</span>
+                </label>
+                <input type="text" name="date_start" value="{{date_start}}" class="dateinput form-control" required id="id_date_start" onfocus="focused(this)" onfocusout="defocused(this)">
+                <br>
+                <label class=" requiredField">
+                    Date Stop<span class="asteriskField">*</span>
+                </label>
+                <input type="text" name="date_stop" value="{{date_stop}}" class="dateinput form-control" required id="id_date_stop" onfocus="focused(this)" onfocusout="defocused(this)">
+                <center><div>
+                    <a class ="btn btn-outline-primary btn-sm mb-0 me-3" onclick="history.back()">Cancel</a>
+                    <input  type="submit" value="Submit" class="btn btn-outline-primary btn-sm mb-0 me-3" >
+                </div></center>
+            </form> 
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+
+{% endblock content%}

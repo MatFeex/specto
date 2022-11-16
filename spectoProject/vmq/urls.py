@@ -29,4 +29,7 @@ urlpatterns = [
     path('vmq/<vmq_id>/delete-vmq/',views.delete_vmq, name="delete-vmq"),
     path('vmq/<vmq_id>/restore-vmq/',views.restore_vmq, name="restore-vmq"),
     path('vmq/<vmq_id>/vmq-details/',views.read_specific_vmq, name="vmq-details"),
+
+    # urls for VMQ - KPI
+    path('vmq-kpi/',views.vmq_kpi, name="vmq-kpi"),
 ]
