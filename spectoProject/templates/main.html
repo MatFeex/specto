@@ -784,7 +784,7 @@
                           margin-top: -1em;
                         }
                       </style>
-                      <form method='GET' >  
+                      <form method='POST' action="{% url 'vmq-kpi-select-range' %}">  
                         {% csrf_token %}
                         <input type="hidden" name="select-dates" value="select-dates">
                         <button  type="submit" class='btn-dates class="nav-link mb-0 px-0 py-1"'>

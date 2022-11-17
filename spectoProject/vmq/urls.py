@@ -32,4 +32,5 @@ urlpatterns = [
 
     # urls for VMQ - KPI
     path('vmq-kpi/',views.vmq_kpi, name="vmq-kpi"),
+    path('vmq-kpi/select-range',views.select_range, name="vmq-kpi-select-range"),
 ]

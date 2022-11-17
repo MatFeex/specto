@@ -278,21 +278,18 @@ def restore_vmq(request,vmq_id):
 
 
 # VMQ KPI
+def select_range(request):
+    return render(request,'vmq/vmq-kpi/vmq_kpi_date_range.html')
 
 def vmq_kpi(request):
 
-    date_start = request.session.get('date_start')
-    date_stop = request.session.get('date_stop')
-    if not date_start and not date_stop :
-        date_stop = datetime.now().date
-        date_start = date_stop.replace(day=1).date
+    date_stop = datetime.now().date()
+    date_start = datetime(datetime.now().year,datetime.now().month,1).date()
 
-    if request.GET.get('select-dates') == 'select-dates':
-        if request.method == 'POST':
-            request.session['date_start'] = request.POST.get('date_start')
-            request.session['date_stop'] = request.POST.get('date_stop')
-            return redirect('vmq-kpi')
-        return render(request,'vmq/vmq-kpi/vmq_kpi.html',{'select_dates':True, 'date_start':date_start, 'date_stop':date_stop})
+    if request.method == 'POST':
+            date_start = request.POST.get('date_start')
+            date_stop = request.POST.get('date_stop')
+
 
     vmqs_kpi = VmqItem.objects.filter(vmq__created_at__range = (date_start,date_stop)).exclude(action='')
     item_action_list = [i.item for i in vmqs_kpi]
