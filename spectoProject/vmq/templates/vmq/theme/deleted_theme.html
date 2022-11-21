@@ -19,7 +19,7 @@
 
             <div class="container">
                 <h6>THEMES : {{theme_count}} deleted</h6>
-                <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'theme' %}">Cancel</a>
+                <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'theme' quality_reference_id %}">Cancel</a>
             </div>
             <hr>
         </div>
@@ -43,7 +43,7 @@
                             <span class="text-secondary text-xs font-weight-bold">{{theme.description}}</span>
                         </td>
                         <td class="align-middle text-center">
-                            <a href="{% url 'restore-theme' theme.id %}"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;&nbsp;Restore</a>
+                            <a href="{% url 'restore-theme' quality_reference_id theme.id %}"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;&nbsp;Restore</a>
                         </td>
 
                     {% empty %}

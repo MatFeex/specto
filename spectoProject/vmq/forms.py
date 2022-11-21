@@ -1,6 +1,12 @@
 from dataclasses import field
 from django.forms import ModelForm
-from .models import Theme, Item, Vmq, VmqItem
+from .models import Theme, Item, Vmq, VmqItem, QualityReference
+
+
+class QualityReferenceForm(ModelForm):
+    class Meta:
+        model = QualityReference
+        fields = ['name','description']
 
 class ThemeForm(ModelForm):
     class Meta:

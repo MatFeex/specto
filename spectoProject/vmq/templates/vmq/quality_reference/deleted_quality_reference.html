@@ -18,8 +18,8 @@
             </style>
 
             <div class="container">
-                <h6>ITEMS : {{items_count}} deleted for this theme</h6>
-                <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'item' quality_reference_id theme_id %}">Cancel</a>
+                <h6>VMQ QUALITY REFERENCE : {{quality_reference_count}} deleted</h6>
+                <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'quality-reference' %}">Cancel</a>
             </div>
             <hr>
         </div>
@@ -28,26 +28,22 @@
             <table class="table align-items-center mb-0">
             <thead>
             <tr>
-                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Theme</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Name</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Description</th>
                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
             </tr>
             </thead>
             <tbody>
-                    {% for item in items %}
+                    {% for quality_reference in quality_references %}
                     <tr>
                         <td class="align-middle text-center">
-                            <span class="text-secondary text-xs font-weight-bold">{{item.theme}}</span>
+                            <span class="text-secondary text-xs font-weight-bold">{{quality_reference.name}}</span>
                         </td>
                         <td class="align-middle text-center">
-                            <span class="text-secondary text-xs font-weight-bold">{{item.name}}</span>
+                            <span class="text-secondary text-xs font-weight-bold">{{quality_reference.description}}</span>
                         </td>
                         <td class="align-middle text-center">
-                            <span class="text-secondary text-xs font-weight-bold">{{item.description}}</span>
-                        </td>
-                        <td class="align-middle text-center">
-                            <a href="{% url 'restore-item' quality_reference_id theme_id item.id %}"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;&nbsp;Restore</a>
+                            <a href="{% url 'restore-quality-reference' quality_reference.id %}"><i class="fa fa-check" aria-hidden="true"></i>&nbsp;&nbsp;Restore</a>
                         </td>
 
                     {% empty %}

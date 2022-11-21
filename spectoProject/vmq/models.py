@@ -5,8 +5,17 @@ from django.contrib.auth.models import User
 
 # SPECTO MODELS - VMQ :
 
+class QualityReference(BaseModel,SoftDeleteModel):
+
+    name = models.CharField(max_length=100, default="Quality reference name")
+    description = models.TextField(default="Quality reference description")
+
+    def __str__(self):
+        return self.name
+
 class Theme(BaseModel,SoftDeleteModel):
 
+    quality_reference = models.ForeignKey(QualityReference, on_delete=models.CASCADE)
     name = models.CharField(max_length=100, default="Theme name")
     description = models.TextField(default="Theme description")
 

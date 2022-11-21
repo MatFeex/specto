@@ -4,7 +4,7 @@
 
 <div class="col-12">
     <div class="first-btn" style="margin-bottom: 1em; margin-left: 1em;">
-        <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'theme' %}">BACK</a>
+        <a class ="btn btn-outline-primary btn-sm mb-0 me-3" href="{% url 'theme' quality_reference_id %}">BACK</a>
     </div>
     <div class="card mb-4">
         <div class="card-header pb-0">
@@ -17,8 +17,8 @@
             <div class="container">
                 <h6 style="margin-top: .5em;"> VMQ ITEMS : {{item_count}} registered for this theme</h6>
                 <div>
-                    <a class="btn bg-gradient-dark  mb-0" href="{% url 'create-item' theme_id %}" style="float: left;"><i class=" fas fa-plus " aria-hidden="true"  ></i>&nbsp;&nbsp;Create Item</a>
-                    <a class="btn bg-gradient-dark  mb-0" href="{% url 'deleted-item' theme_id %}" style="float: left; margin-left: 1em;"><i class=" fas fa-undo " aria-hidden="true"  ></i>&nbsp;&nbsp;Restore Item</a>
+                    <a class="btn bg-gradient-dark  mb-0" href="{% url 'create-item' quality_reference_id theme_id %}" style="float: left;"><i class=" fas fa-plus " aria-hidden="true"  ></i>&nbsp;&nbsp;Create Item</a>
+                    <a class="btn bg-gradient-dark  mb-0" href="{% url 'deleted-item' quality_reference_id theme_id %}" style="float: left; margin-left: 1em;"><i class=" fas fa-undo " aria-hidden="true"  ></i>&nbsp;&nbsp;Restore Item</a>
                 </div>
             </div>
             <hr>
@@ -47,9 +47,9 @@
                             <span class="text-secondary text-xs font-weight-bold">{{item.description}}</span>
                         </td>
                         <td class="align-middle text-center">
-                            <a href="{% url 'update-item' theme_id item.id %}"><i class="fa-solid fa-pen-to-square" style="color:blue"></i></a>
+                            <a href="{% url 'update-item' quality_reference_id theme_id item.id %}"><i class="fa-solid fa-pen-to-square" style="color:blue"></i></a>
                             |
-                            <a href="{% url 'delete-item' theme_id item.id %}"><i class="fa-solid fa-trash-can" style="color:#E64848"></i></a>
+                            <a href="{% url 'delete-item' quality_reference_id theme_id item.id %}"><i class="fa-solid fa-trash-can" style="color:#E64848"></i></a>
                         </td>
 
                     {% empty %}
