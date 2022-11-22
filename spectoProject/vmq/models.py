@@ -55,12 +55,19 @@ class VmqItem(models.Model):
         ('Application', 'Application'),
         ('Disposition', 'Disposition')
     ]
+    choices = [
+        ('Deferred', 'Deferred'),
+        ('Immediate', 'Immediate')
+    ]
     item = models.ForeignKey(Item, on_delete=models.CASCADE)
     vmq = models.ForeignKey(Vmq, on_delete=models.CASCADE)
     result = models.CharField(max_length=30,choices=results)
     type = models.CharField(max_length=30, choices=types)
     comment = models.TextField(blank=True, null=True)
     action = models.TextField(blank=True, null=True)
+    defer_immediate = models.CharField(max_length=30, choices=choices, null=True, blank=True, default=None)
+    responsible = models.ForeignKey(Employee,on_delete=models.CASCADE, null=True,blank=True)
+    date = models.DateField(default=timezone.now,null=True,blank=True)
 
     def __str__(self):
         return self.comment

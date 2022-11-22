@@ -23,17 +23,24 @@ class ItemForm(ModelForm):
 class VmqForm(ModelForm):
     class Meta:
         model = Vmq
-        fields = ['reference','visit_date','user','employee','workshop']
+        fields = ['reference','visit_date','user']
         labels = {
             'user': 'Visitor',
             'reference': 'VMQ REF',
             'visit_date': 'DATE',
-            'employee': 'Visited',
         }
 
 class VmqItemForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(VmqItemForm, self).__init__(*args, **kwargs)
+        self.fields['defer_immediate'].label = False
+        self.fields['responsible'].label = False
+        self.fields['date'].label = False
     class Meta:
         model= VmqItem
-        fields = ['result','type','comment']
+        fields = ['defer_immediate','responsible','date']
+        labels = {
+            'defer_immediate': 'Defered/Immediate',
+        }
 
 

@@ -42,11 +42,21 @@
                     </div>
                   </div>
                   <div class="form-row">
-                    <div class="form-group">
-                      {{ vmq_form.employee|as_crispy_field }}
-                    </div>
-                    <div class="form-group">
-                      {{ vmq_form.workshop|as_crispy_field }}
+                    <div class="form-group" style="max-width: 50%;">
+                      <p>Visited</p>
+
+                      <select name="employee" class="select form-control" required="" id="id_employee">
+                        <option value="" selected="">---------</option>
+                      
+                        {% for employee in latest_employee_visited %}
+                        <option value="{{employee.matricule}}">{{employee.matricule}} - {{employee.names}}</option>
+                        {% endfor %}
+
+                      
+                      </select>
+
+
+
                     </div>
                   </div>
                   <hr style="height: 2px; margin: 0 2em 0 2em;">
@@ -62,6 +72,9 @@
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Types</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comment</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Defered/Immediate</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="min-width: 15em;">Responsible</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7" style="min-width: 12em;">Date</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -90,8 +103,19 @@
                                                 <center><input style="width: 9em;"class="input-form" type="text" name="comment"/></center>
                                             </td>
                                             <td>
-                                                <center><input style="width: 9em;" class="input-form" type="text" name="action"/></center>
+                                                <center><input style="min-width: 9em;" class="input-form" type="text" name="action"/></center>
                                             </td>
+                                            <td>
+                                                <center>{{ vmq_item_form.defer_immediate|as_crispy_field }}</center>
+                                            </td>
+                                            <td>
+                                                <center>{{ vmq_item_form.responsible|as_crispy_field }}</center>
+                                            </td>
+                                            <td>
+                                                <center>{{ vmq_item_form.date|as_crispy_field }}</center>
+                                            </td>
+
+
                     
                                         {% empty %}
                                             <td class="align-middle text-center">
