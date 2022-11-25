@@ -15,12 +15,12 @@
                 {% csrf_token %}
                 <style>
                     .form-row{
-                        display: flex;
+                        display: grid;
+                        grid-template-columns: 2fr 2fr 3fr;
                         margin: 1.5em;
                     }
                     .form-group{
-                        margin-left: .5em;
-                        width: 100%;
+                        width: 95%;
                     }
                     .input-form{
                         border: 1px solid #bcb9b9;
@@ -35,28 +35,17 @@
                         {{ vmq_form.user|as_crispy_field }}
                     </div>
                     <div class="form-group">
-                      {{ vmq_form.reference|as_crispy_field }}
-                    </div>
-                    <div class="form-group">
                       {{ vmq_form.visit_date|as_crispy_field }}
                     </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="form-group" style="max-width: 50%;">
-                      <p>Visited</p>
-
+                    <div class="form-group">
+                        <label for="id_vmq_employee_visited" class=" requiredField">
+                            Visited (Matricule - Name - Workshop)<span class="asteriskField">*</span>
+                        </label>
                       <select name="employee" class="select form-control" required="" id="id_employee">
-                        <option value="" selected="">---------</option>
-                      
                         {% for employee in latest_employee_visited %}
-                        <option value="{{employee.matricule}}">{{employee.matricule}} - {{employee.names}}</option>
+                        <option selected value="{{employee.matricule}}">{{employee.matricule}} - {{employee.names}} - {{employee.workshop.name}}</option>
                         {% endfor %}
-
-                      
                       </select>
-
-
-
                     </div>
                   </div>
                   <hr style="height: 2px; margin: 0 2em 0 2em;">

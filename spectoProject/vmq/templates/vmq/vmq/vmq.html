@@ -23,7 +23,6 @@
                     <thead>
                     <tr>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">VMQ Ref</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Visit Date</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Visitor</th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Visited</th>
@@ -36,10 +35,7 @@
                             {% for vmq in vmqs %}
                             <tr>
                                 <td class="align-middle text-center">
-                                    <span class="text-secondary text-xs font-weight-bold">{{vmq.id}}</span>
-                                </td>
-                                <td class="align-middle text-center">
-                                    <a class="btn btn-outline-secondary btn-sm" style="margin: 0; width: 100%;" href="{% url 'vmq-details' vmq.id %}" role="button">{{vmq.reference}}</a>
+                                    <a class="btn btn-outline-secondary btn-sm" style="margin: 0; width: 100%;" href="{% url 'vmq-details' vmq.id %}" role="button">{{vmq.id}}</a>
                                 </td>
                                 <td class="align-middle text-center">
                                     <span class="text-secondary text-xs font-weight-bold">{{vmq.visit_date}}</span>

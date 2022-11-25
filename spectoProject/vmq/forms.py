@@ -23,10 +23,9 @@ class ItemForm(ModelForm):
 class VmqForm(ModelForm):
     class Meta:
         model = Vmq
-        fields = ['reference','visit_date','user']
+        fields = ['visit_date','user']
         labels = {
             'user': 'Visitor',
-            'reference': 'VMQ REF',
             'visit_date': 'DATE',
         }
 

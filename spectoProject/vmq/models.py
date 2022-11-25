@@ -35,7 +35,6 @@ class Item(BaseModel,SoftDeleteModel):
 
 class Vmq(BaseModel, SoftDeleteModel):
 
-    reference = models.CharField(max_length=100, default="REF")
     visit_date = models.DateField(default=timezone.now)
     user = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
     employee = models.ForeignKey(Employee,to_field="matricule", on_delete=models.CASCADE)

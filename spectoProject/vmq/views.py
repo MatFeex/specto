@@ -238,12 +238,15 @@ def read_deleted_vmq(request):
 def create_vmq(request):
 
     try :
+
+        username_matricule = 80197
+
         # GET latest planning dates
         latest_planning = VMQ_Planning.objects.latest('created_at')
         latest_month = latest_planning.month
         latest_year = latest_planning.year
         # GET employees list FROM latest planning
-        latest_employee_visited_mat = list(VMQ_Planning.objects.filter(closed=False,month=latest_month,year=latest_year).values_list('vmq_employee_visited', flat=True))
+        latest_employee_visited_mat = list(VMQ_Planning.objects.filter(closed=False,month=latest_month,year=latest_year,vmq_employee_qualified=username_matricule).values_list('vmq_employee_visited', flat=True))
         latest_employee_visited = Employee.objects.filter(matricule__in = latest_employee_visited_mat)
     except : messages.error(request, "No VMQ planning resgistered : please generate one before creating a VMQ")
 
@@ -264,7 +267,7 @@ def create_vmq(request):
         vmq_item_form = VmqItemForm(request.POST)
 
         if vmq_form.is_valid():
-            #try :
+            try :
                 # SAVE PARENT
                 visited_mat = request.POST.get('employee')
                 vmq_form.employee = visited_mat
@@ -290,7 +293,7 @@ def create_vmq(request):
                 planning_to_close.closed = True
                 planning_to_close.save()
                 return redirect('vmq')
-            #except : messages.error(request, "Employee already visited or corresponding VMQ Planning inexistent")
+            except : messages.error(request, "Employee already visited or corresponding VMQ Planning inexistent")
         else : messages.error(request, 'An error occurred while creating the VMQ')
 
     else : 
@@ -346,7 +349,7 @@ def update_vmq(request,vmq_id):
     vmq_items = VmqItem.objects.filter(vmq_id=vmq_id) # ITEMS for the specific VMQ
     zip_items = zip(items,vmq_items) # zip to easy access in template
 
-    context = {'vmq_form':vmq_form,'zip_items':zip_items}
+    context = {'vmq_form':vmq_form,'zip_items':zip_items,'vmq':vmq}
     return render(request, 'vmq/vmq/vmq_update_form.html', context)
 
 
