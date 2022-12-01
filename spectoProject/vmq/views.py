@@ -6,6 +6,8 @@ from django.contrib import messages
 from django.db.models import Q
 from datetime import datetime
 
+from .decorators import allowed_users
+
 # SPECTO VIEWS : VMQ
 
 # CRUD-R for QUALITY REFERENCE
@@ -235,8 +237,8 @@ def read_deleted_vmq(request):
     return render(request,'vmq/vmq/deleted_vmq.html',context)
 
 
+@allowed_users(allowed_roles=['User','administrators','add_vmq_group'])
 def create_vmq(request):
-
     try :
 
         username_matricule = 80197
