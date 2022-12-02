@@ -237,7 +237,7 @@ def read_deleted_vmq(request):
     return render(request,'vmq/vmq/deleted_vmq.html',context)
 
 
-@allowed_users(allowed_roles=['User','administrators','add_vmq_group'])
+@allowed_users(allowed_roles=['add_vmq_group'])
 def create_vmq(request):
     try :
 
@@ -250,6 +250,7 @@ def create_vmq(request):
         # GET employees list FROM latest planning
         latest_employee_visited_mat = list(VMQ_Planning.objects.filter(closed=False,month=latest_month,year=latest_year,vmq_employee_qualified=username_matricule).values_list('vmq_employee_visited', flat=True))
         latest_employee_visited = Employee.objects.filter(matricule__in = latest_employee_visited_mat)
+
     except : messages.error(request, "No VMQ planning resgistered : please generate one before creating a VMQ")
 
     if request.method == 'POST' :

@@ -18,9 +18,6 @@ def allowed_users(allowed_roles=[]):
                     else: return render(request,'vmq/error.html',{'message':f"Undefined permissions for '{user.username}' : access denied by default"})
                 else: return render(request,'vmq/error.html',{'message':f'{user.username} is not active'})
             else: return render(request,'vmq/error.html',{'message':'Non-logged-in user : access denied'})
-            #         else: messages.error(request, 'Your request has been denied: restricted permissions')
-            #     else:messages.error(request, f'{user.username} is not active')
-            # else: messages.error(request, f'{user.username} is not registered')
         return wrapper_func
     return decorator
 
