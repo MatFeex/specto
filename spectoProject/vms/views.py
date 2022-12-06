@@ -51,7 +51,8 @@ def create_vms(request):
         # VMS FORM
         
         vms_form = VmsForm(request.POST)
-
+        try : vms_form.user = request.user
+        except :  messages.error(request, 'Visitor unknown: please login to identify yourself')
 
         if vms_form.is_valid():
 
@@ -74,14 +75,14 @@ def create_vms(request):
                 planning_to_close.closed = True
                 planning_to_close.save()
                 return redirect('vms')
-            except : messages.error(request, "The corresponding VMS Planning for the visited employee doesn't exist")
+            except : 
+                messages.error(request, "The VMS has been created but no planning has been associated with it (visited not found in the last VMS planning)")
         else : messages.error(request, 'An error occurred while creating the VMS')
     
     else : vms_form = VmsForm()
 
     context = {'vms_form':vms_form,'today':str(datetime.now())[:10]}
     return render(request, 'vms/vms/vms_form.html', context)
-
 
 
 def update_vms(request,vms_id):

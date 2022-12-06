@@ -7,4 +7,5 @@ urlpatterns = [
     path('',include('vms.urls')),
     path('',include('vmq.urls')),
     path('',include('gemba.urls')),
+    path('',include('passation.urls')),
 ]

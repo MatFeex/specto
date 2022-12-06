@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'vmq.apps.VmqConfig',
     'gemba.apps.GembaConfig',
     'vms.apps.VmsConfig',
+    'passation.apps.PassationConfig',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

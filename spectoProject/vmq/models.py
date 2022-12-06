@@ -42,7 +42,7 @@ class Vmq(BaseModel, SoftDeleteModel):
     items = models.ManyToManyField(Item, through='VmqItem',blank=True)
 
     def __str__(self):
-        return self.reference
+        return self.id
 
 
 class VmqItem(models.Model):

@@ -1,0 +1,64 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="col-12">
+    <div class="card mb-4">
+        <div class="card-header pb-0">
+            <style>
+                .container{
+                    display: flex;
+                    justify-content: space-between;
+                }
+            </style>
+
+            <div class="container">
+                <h6>PASSATIONS : {{passations.count}} registered</h6>
+            </div>
+            <hr>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+            <div class="table-responsive p-0">
+                <table style="width: 95%;" class="table align-items-center mb-0">
+                    <thead>
+                    <tr>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Transmitter</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Receiver</th>
+                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                            {% for passation in passations %}
+                            <tr>
+                                <td class="align-middle text-center">
+                                    <a class="btn btn-outline-secondary btn-sm" style="margin: 0; width: 100%;" href="{% url 'passation-details' passation.id %}" role="button">{{passation.id}}</a>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">{{passation.transmitter}}</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">{{passation.receiver}}</span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <a href="{% url 'update-passation' passation.id %}"><i class="fa-solid fa-pen-to-square" style="color:blue"></i></a>
+                                    |
+                                    <a href="{% url 'delete-passation' passation.id %}"><i class="fa-solid fa-trash-can" style="color:#E64848"></i></a>
+                                </td>
+        
+                            {% empty %}
+                                <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">No passation registered</span>
+                                </td>
+                            </tr>    
+                            {% endfor %}                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content%}
+
+

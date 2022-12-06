@@ -6,9 +6,8 @@ class VmsForm(ModelForm):
     class Meta:
         model = Vms
         fields = [
-            'reference','visit_date','user','employee','workshop']
+            'reference','visit_date','employee','workshop']
         labels = {
-            'user': 'Visitor',
             'reference': 'VMQ REF',
             'visit_date': 'DATE',
             'employee': 'Visited',
