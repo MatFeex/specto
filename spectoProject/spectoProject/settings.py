@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'gemba.apps.GembaConfig',
     'vms.apps.VmsConfig',
     'passation.apps.PassationConfig',
+    'five_s.apps.FiveSConfig',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

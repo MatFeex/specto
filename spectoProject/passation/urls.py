@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
     
-    # urls for VMQ
+    # urls for PASSATION
     path('passation/deleted-passation/',views.read_deleted_passation, name="deleted-passation"),
     path('passation/',views.read_passation, name="passation"),
     path('passation/create-passation/',views.create_passation, name="create-passation"),

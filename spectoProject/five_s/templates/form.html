@@ -1,0 +1,26 @@
+{% extends 'main.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="col-lg-6 mb-lg-0 mb-4 offset-2"> 
+    <div class="card z-index-2 " height="10">
+        <div class="card-header pb-0">
+        <h6>{{text}}</h6>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2" style="margin: 2em;">
+            <form action="" method="POST">  
+                {% csrf_token %}
+                {{form|crispy}}
+                <br>
+                <center><div>
+                    <a class ="btn btn-outline-primary btn-sm mb-0 me-3" onclick="history.back()">Cancel</a>
+                    <input  type="submit" value="Submit" class="btn btn-outline-primary btn-sm mb-0 me-3" >
+                </div></center>
+            </form> 
+        </div>
+    </div>
+</div>
+
+{% endblock content%}

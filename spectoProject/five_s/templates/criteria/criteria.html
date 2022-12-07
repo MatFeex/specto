@@ -1,0 +1,57 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="col-12">
+    <div class="card mb-4">
+        <div class="card-header pb-0">
+            <style>
+                .container{
+                    display: flex;
+                    justify-content: space-between;
+                }
+            </style>
+            <div class="container">
+                <h6>5S CRITERIA : {{criteria_count}} registered</h6>
+            </div>
+            <hr>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+        <div class="table-responsive p-0">
+            <table class="table align-items-center mb-0">
+            <thead>
+            <tr>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Description</th>
+                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+                    {% for criteria in criterias %}
+                    <tr>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{criteria.name}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">{{criteria.description}}</span>
+                        </td>
+                        <td class="align-middle text-center">
+                            <a href="{% url 'update-criteria' criteria.id %}"><i class="fa-solid fa-pen-to-square" style="color:blue"></i></a>
+                            |
+                            <a href="{% url 'delete-criteria' criteria.id %}"><i class="fa-solid fa-trash-can" style="color:#E64848"></i></a>
+                        </td>
+
+                    {% empty %}
+                        <td class="align-middle text-center">
+                            <span class="text-secondary text-xs font-weight-bold">No criteria registered</span>
+                        </td>
+                    </tr>    
+                    {% endfor %}
+            </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content%}

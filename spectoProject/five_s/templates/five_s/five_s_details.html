@@ -1,0 +1,114 @@
+{% extends 'main.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<div class="col-lg-6 mb-lg-0 mb-4 offset-2"  style="width: 90%; margin: auto;"> 
+    <div class="card z-index-2 ">
+        <div class="card-header pb-0">
+        <h6>5S - DETAILS</h6>
+        <hr>
+        </div>
+        <div class="card-body px-0 pt-0 pb-2">
+                <style>
+                    .form-row{
+                        display: flex;
+                        margin: 1.5em;
+                    }
+                    .form-group{
+                        margin-left: .5em;
+                        width: 100%;
+                    }
+                    .form-group h5{
+                        background: transparent;
+                        border: 1px solid #bcb9b9;
+                        padding: .5rem;
+                        border-radius: 10px;
+                        width: 100%;
+                        font-weight: 500;
+                        outline: none;
+                        margin-bottom: 1em;
+                        font-size: 1em;
+                    }
+                    .form-group h6{
+                        font-size: .8em;
+                        margin-left: .2em;
+                    }
+                </style>
+                <div class="form-row">
+                    <div class="form-group">
+                        <h6>Visitor :</h6>
+                        <h5>{{five_s.user}}</h5>
+                    </div>
+                    <div class="form-group">
+                        <h6>Workshop :</h6>
+                        <h5>{{five_s.workshop}}</h5>
+                    </div>
+                  </div>
+                  
+
+                  <div class="form-row">
+                    <div class="form-group">
+                        <style>
+                            .table-responsive h5{
+                                width: 95%;
+                                min-height: 2.5em;
+                                min-width: 7em;
+                                margin-top: .7em;
+                            }
+                            .table-responsive h6{
+                                margin-top: 1.5em;
+                            }
+                        </style>
+                        <div class="table-responsive p-0">
+                            <table style="width: 95%;" class="table bordered">
+                                <thead>
+                                <tr>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Criteria</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Response</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comment</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                        {% for criteria,five_s_criteria in zip_criterias %}
+                                        <tr>
+                                            <td>
+                                                <h5 style="width: 20em;"><span class="text-secondary text-xs font-weight-bold">{{criteria.name}}</span></h5>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <h5>{{five_s_criteria.response}}</h5>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <h5>{{five_s_criteria.comment}}</h5>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <h5>{{five_s_criteria.action}}</h5>
+                                                </div>
+                                            </td>
+                    
+                                        {% empty %}
+                                            <td class="align-middle text-center">
+                                                <span class="text-secondary text-xs font-weight-bold">No data</span>
+                                            </td>
+                                        </tr>    
+                                        {% endfor %}                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                  </div>
+                <center><div>
+                    <a class ="btn btn-outline-primary btn-sm mb-0 me-3" onclick="history.back()">BACK</a>
+                </div></center>
+        </div>
+    </div>
+</div>
+
+{% endblock content%}
