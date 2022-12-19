@@ -68,7 +68,6 @@
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Criteria</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Response</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Comment</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -87,18 +86,14 @@
                                                     <h5>{{five_s_criteria.comment}}</h5>
                                                 </div>
                                             </td>
-                                            <td>
-                                                <div class="form-group">
-                                                    <h5>{{five_s_criteria.action}}</h5>
-                                                </div>
-                                            </td>
                     
                                         {% empty %}
                                             <td class="align-middle text-center">
                                                 <span class="text-secondary text-xs font-weight-bold">No data</span>
                                             </td>
                                         </tr>    
-                                        {% endfor %}                                    
+                                        {% endfor %}               
+                                                             
                                 </tbody>
                             </table>
                         </div>
